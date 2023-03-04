@@ -67,3 +67,9 @@ class DatabaseSearch:
                 self._stmt_str+=", crosslistings.coursenum ASC, classes.classid ASC"
                 cursor.execute(self._stmt_str, self._replace_list)
                 return cursor.fetchall() 
+    def fullsearch(self, idept, iarea, icoursenum, ititle): 
+            self.deptsearch(dept=idept)
+            self.areasearch(area=iarea)
+            self.numsearch(num=icoursenum)
+            self.titlesearch(title = ititle)
+            return self.execute()

@@ -60,9 +60,29 @@ def main():
                 for result in query_result: 
                     result_list.insertItem(result) 
                     result_list.setCurrentRow(1)
+                    
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
-        
+    def class_slot(selected): 
+        with socket.socket() as sock: 
+            sock.connect((host,port))
+            print('Connected to server')
+            selected_split = selected.split(' ')
+            classid = 0
+            if len(selected_split[0]) < 3: 
+                classid += int(selected_split[1])
+            else: 
+                classid += int(selected_split[0])
+            input = sock.makefile(mode='wb')
+            print('sent classid')
+            pickle.dump(classid,input)
+            input.flush 
+            flo = sock.makefile('rb')
+            class_info = pickle.load(flo)
+            widget.QMessageBox.information(window, 'Class Details',
+            class_info)
+            
+    result_list.itemActivated(class_slot)         
         #-------------layout--------------------------
     layout = widget.QGridLayout()
     layout.setSpacing(0)

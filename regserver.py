@@ -8,6 +8,8 @@ import sys
 import argparse as ap 
 import pickle
 import os
+import textwrap as tw
+import classsearch as cs
 #----------------------------------------------------------------------
 # format each row for list given raw sqlite result row
 def createRow(row): 
@@ -38,9 +40,57 @@ def handle_tuple(search_list,sock):
         result_list.append(createRow(row=irow))
     flo = sock.makefile(mode='wb')
     pickle.dump(result_list,flo)
+    flo.flush()
     print('Wrote to client')
-def handle_int(input, sock): 
-     
+
+def format_string(generaltable, dept_and_num, prof_table):
+    formatstring = ''
+    general = generaltable[0]
+    wrapper = tw.TextWrapper(width = 72, break_long_words=True)
+    formatstring+='Course Id: '+general[0]+'\n'
+    formatstring+='\n'
+    formatstring+='Days: '+general[1]+'\n'
+    formatstring+='Start time: '+general[2]+'\n'
+    formatstring+='End time: '+general[3]+'\n'
+    formatstring+='Building: '+general[4]+'\n'
+    formatstring+='Room: '+general[5]+ '\n'
+    formatstring+='\n'
+    for row in dept_and_num:
+        formatstring+='Dept and Number: '
+        formatstring+=row[0]+' '+row[1]+'\n'
+    formatstring+='\n'
+    formatstring+= 'Area: '+general[6]+'\n'
+    formatstring+='\n'
+    titlestring = wrapper.wrap('Title: '+general[7])
+    for line in titlestring:
+        formatstring+=line+'\n'
+    formatstring+='\n'
+    descripstring = wrapper.wrap('Description: '+general[8])
+    for line in descripstring:
+        formatstring+=line+'\n'
+    formatstring+='\n'
+    prereqstring = wrapper.wrap('Prerequisites: '+general[9])
+    for line in prereqstring:
+        formatstring+=line+'\n'
+    formatstring+='\n'
+    for name in prof_table:
+        formatstring+='Professor: '+name[0]+'\n'
+    return formatstring
+
+def handle_int(classid, sock): 
+    searchresult = ''
+    search = cs.ClassSearch(classid)
+    gen = search.get_general()
+    d_and_n = search.get_deptandnum()
+    profs = search.get_prof()
+    searchresult = format_string(generaltable = gen, 
+    dept_and_num=d_and_n,
+    prof_table=profs)
+    flo = sock.makefile(mode='wb')
+    pickle.dump(searchresult,flo)
+    flo.flush()
+    print('Wrote to client')
+
 # connect to client 
 def main(): 
     #--------------------parser-------------------------------
@@ -70,7 +120,7 @@ def main():
                   search_input = pickle.load(input_string)
                   print('Recieved input')
                   if(type(search_input) == int): 
-                       handle_int(input=search_input,sock=isock)
+                    handle_int(input=search_input,sock=isock)
                   else: 
                     handle_tuple(search_list=search_input, sock=isock)
                   print('Resolved search')
