@@ -24,6 +24,7 @@ def main():
     port = args.port 
     #-----------gui-----------------------------------
     app = widget.QApplication(sys.argv)
+        #--------------labels------------------------
         #--------------text fields--------------------
     dept = widget.QLineEdit('dept')
     coursenum = widget.QLineEdit('coursenum')
@@ -32,7 +33,7 @@ def main():
         #-------------submit button-------------------
     submit = widget.QPushButton('submit')
         #-------------list box------------------------
-    result_list = widget.QListWidget
+    result_list = widget.QListWidget()
         #--------------text data----------------------
     dept_text = dept.text()
     coursenum_text = coursenum.text()
@@ -60,15 +61,15 @@ def main():
     layout = widget.QGridLayout()
     layout.setSpacing(0)
     layout.setContentsMargins(0,0,0,0)
-    layout.addWidget(dept,0,0,1,2)
-    layout.addWidget(area,1,0,1,2)
-    layout.addWidget(coursenum,2,0,1,2)
-    layout.addWidget(area,3,0,1,2)
+    layout.addWidget(dept,0,1,1,2)
+    layout.addWidget(area,1,1,1,2)
+    layout.addWidget(coursenum,2,1,1,2)
+    layout.addWidget(area,3,1,1,2)
+    layout.addWidget(title,4,1,1,2)
     layout.addWidget(submit,2,2,1,1)
-    layout.addWidget(result_list,4,0,1,3)
-    layout.setRowStretch(4,2)
-    layout.setColumnStretch(0,1)
-    layout.setColumnStretch(1,1)
+    layout.addWidget(result_list,5,0,1,3)
+    layout.setRowStretch(5,2)
+    layout.setColumnStretch(1,4)
         #----------------frame--------------------------
     frame = widget.QFrame()
     frame.setLayout(layout)
