@@ -28,7 +28,7 @@ def createRow(row):
         rowstring += str(' '+row[4])
         return rowstring
 # compile sqlite result string into tuple for client 
-def handle_client(search_list,sock):
+def handle_tuple(search_list,sock):
     result_list = []
     search = ds.DatabaseSearch()
     rawresults = search.fullsearch(idept=search_list[0], 
@@ -39,6 +39,8 @@ def handle_client(search_list,sock):
     flo = sock.makefile(mode='wb')
     pickle.dump(result_list,flo)
     print('Wrote to client')
+def handle_int(input, sock): 
+     
 # connect to client 
 def main(): 
     #--------------------parser-------------------------------
@@ -67,7 +69,10 @@ def main():
                   input_string = isock.makefile(mode='rb')
                   search_input = pickle.load(input_string)
                   print('Recieved input')
-                  handle_client(search_list=search_input, sock=isock)
+                  if(type(search_input) == int): 
+                       handle_int(input=search_input,sock=isock)
+                  else: 
+                    handle_tuple(search_list=search_input, sock=isock)
                   print('Resolved search')
         except Exception as ex: 
              print(ex, file=sys.stderr)
