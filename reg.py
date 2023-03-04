@@ -17,7 +17,8 @@ def main():
     parser.add_argument('host', 
     help="the host on which the server is running")
     parser.add_argument('port', 
-    help="the port at which the server is listening")
+    help="the port at which the server is listening",
+    type=int)
     args = parser.parse_args()
     host = args.host
     port = args.port 
@@ -31,7 +32,7 @@ def main():
         #-------------submit button-------------------
     submit = widget.QPushButton('submit')
         #-------------list box------------------------
-    result_list = widget.QListWidget()
+    result_list = widget.QListWidget
         #--------------text data----------------------
     dept_text = dept.text()
     coursenum_text = coursenum.text()
