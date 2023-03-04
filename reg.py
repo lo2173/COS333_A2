@@ -25,6 +25,10 @@ def main():
     #-----------gui-----------------------------------
     app = widget.QApplication(sys.argv)
         #--------------labels------------------------
+    dept_label = widget.QLabel('Dept:')
+    num_label = widget.QLabel('Number: ')
+    area_label = widget.QLabel('Area: ')
+    title_label = widget.QLabel('Title: ')
         #--------------text fields--------------------
     dept = widget.QLineEdit('dept')
     coursenum = widget.QLineEdit('coursenum')
@@ -42,7 +46,7 @@ def main():
     inputlist = [dept_text, coursenum_text, area_text, title_text]
         #--------------submit button slot------------------
     def submit_slot(result): 
-            #-------------server----------------------
+            #-------------client----------------------
             # have to deal with security 
             with socket.socket() as sock: 
                 sock.connect((host,port))
@@ -57,19 +61,29 @@ def main():
                     result_list.insertItem(result) 
                     result_list.setCurrentRow(1)
     submit.clicked.connect(submit_slot)
+        #--------------list option slot------------------
+        
         #-------------layout--------------------------
     layout = widget.QGridLayout()
     layout.setSpacing(0)
     layout.setContentsMargins(0,0,0,0)
-    layout.addWidget(dept,0,1,1,2)
-    layout.addWidget(area,1,1,1,2)
-    layout.addWidget(coursenum,2,1,1,2)
-    layout.addWidget(area,3,1,1,2)
-    layout.addWidget(title,4,1,1,2)
+            #--------------labels---------------------
+    layout.addWidget(dept_label,0,0,1,1)
+    layout.addWidget(area_label,1,0,1,1)
+    layout.addWidget(num_label,2,0,1,1)
+    layout.addWidget(title_label,3,0,1,1)
+            #-------------textfields-------------------
+    layout.addWidget(dept,0,1,1,1)
+    layout.addWidget(area,1,1,1,1)
+    layout.addWidget(coursenum,2,1,1,1)
+    layout.addWidget(title,3,1,1,1)
+            #-----------button-------------------------
     layout.addWidget(submit,2,2,1,1)
-    layout.addWidget(result_list,5,0,1,3)
-    layout.setRowStretch(5,2)
-    layout.setColumnStretch(1,4)
+            #------------list--------------------------
+    layout.addWidget(result_list,4,0,1,3)
+            #---------formatting-----------------------
+    layout.setRowStretch(4,3)
+    layout.setColumnStretch(1,3)
         #----------------frame--------------------------
     frame = widget.QFrame()
     frame.setLayout(layout)
