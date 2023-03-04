@@ -59,7 +59,6 @@ def main():
             #------------layout--------------------------
             # question boxes in top 1/3 and list box in bottom 
         layout = widget.QGridLayout()
-        layout.addWidget
 
     except Exception as ex: 
         print(ex, file=sys.stderr); 
