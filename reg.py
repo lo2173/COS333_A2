@@ -31,7 +31,7 @@ def main():
         #-------------submit button-------------------
     submit = widget.QPushButton('submit')
         #-------------list box------------------------
-    result_list = widget.QListWidget
+    result_list = widget.QListWidget()
         #--------------text data----------------------
     dept_text = dept.text()
     coursenum_text = coursenum.text()
