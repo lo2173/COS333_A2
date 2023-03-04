@@ -2,6 +2,8 @@
 # databasesearch.py
 # Author: Lois I Omotara
 #----------------------------------------------------------------------
+import sqlite3
+import contextlib as cl 
 class DatabaseSearch:
     def __init__(self):
         self._stmt_str = "SELECT classes.classid, crosslistings.dept,"
@@ -56,3 +58,12 @@ class DatabaseSearch:
         return self._replace_list
     def get_cmdstring(self):
         return self._stmt_str
+    def execute(self):
+        DATABASE_URL = 'file:reg.sqlite?mode=ro' 
+        with sqlite3.connect(DATABASE_URL , isolation_level= None,
+            uri= True) as connection:
+            with cl.closing(connection.cursor()) as cursor:
+                self._stmt_str+=" ORDER BY crosslistings.dept ASC"
+                self._stmt_str+=", crosslistings.coursenum ASC, classes.classid ASC"
+                cursor.execute(self._stmt_str, self._replace_list)
+                return cursor.fetchall() 
