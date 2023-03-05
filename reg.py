@@ -74,7 +74,7 @@ def main():
             print('Connected to server')
             selected_split = selected.split(' ')
             classid = 0
-            if len(selected_split[0]) < 3: 
+            if selected_split == ' ': 
                 classid += int(selected_split[1])
             else: 
                 classid += int(selected_split[0])
