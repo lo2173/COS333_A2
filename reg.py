@@ -12,24 +12,23 @@ import sys
 #----------------------------------------------------------------------
 def create_control_frame(dept_label, area_label, num_label, title_label,
                   dept, area, coursenum, title, submit): 
-        #------------- control frame layout------------
+    #------------- control frame layout------------
     layout = widget.QGridLayout()
     layout.setSpacing(4)
     layout.setContentsMargins(4,4,4,4)
-            #--------------labels---------------------
+    #--------------labels---------------------
     layout.addWidget(dept_label,0,0,1,1)
     layout.addWidget(area_label,1,0,1,1)
     layout.addWidget(num_label,2,0,1,1)
     layout.addWidget(title_label,3,0,1,1)
-            #-------------textfields-------------------
+    #-------------textfields-------------------
     layout.addWidget(dept,0,1,1,1)
     layout.addWidget(area,1,1,1,1)
     layout.addWidget(coursenum,2,1,1,1)
     layout.addWidget(title,3,1,1,1)
-            #-----------button-------------------------
+    #-----------button-------------------------
     layout.addWidget(submit,1,2,2,1)
-            #------------list--------------------------
-            #---------formatting-----------------------
+    #---------formatting-----------------------
     layout.setRowStretch(0,0)
     layout.setRowStretch(1,0)
     layout.setRowStretch(2,0)
@@ -38,10 +37,36 @@ def create_control_frame(dept_label, area_label, num_label, title_label,
     layout.setColumnStretch(1,1)
     layout.setColumnStretch(2,0)
     layout.setColumnStretch(3,0)
-        #----------------control_frame------------------
+    #----------------control_frame------------------
     control_frame = widget.QFrame()
     control_frame.setLayout(layout)
     return control_frame 
+
+def create_list_frame(result_list):
+        #---------------list frame layout--------------
+    listlayout = widget.QGridLayout()
+    listlayout.setSpacing(0)
+    listlayout.setContentsMargins(0,0,0,0)
+    listlayout.addWidget(result_list,0,0,1,1)
+        #-------------list_frame-----------------------
+    list_frame = widget.QFrame()
+    list_frame.setLayout(listlayout)   
+    return list_frame
+
+def create_central_frame(control_frame, list_frame): 
+    central_frame_layout = widget.QGridLayout()
+    central_frame_layout.setSpacing(0)
+    central_frame_layout.setContentsMargins(0,0,0,0)
+    central_frame_layout.setRowStretch(0,0)
+    central_frame_layout.setRowStretch(1,1)
+    central_frame_layout.setColumnStretch(0,1)
+    central_frame_layout.addWidget(control_frame,0,0)
+    central_frame_layout.addWidget(list_frame,1,0)
+        #--------------central_frame-------------------
+    central_frame = widget.QFrame()
+    central_frame.setLayout(central_frame_layout)
+    return central_frame
+
 def main(): 
     #-------------parser------------------------------
     parser = ap.ArgumentParser(prog = "reg.py", 
@@ -142,33 +167,17 @@ def main():
         #----------------control frame-----------------
     control_frame = create_control_frame(dept_label, area_label,
         num_label,title_label,dept, area,coursenum,title,submit)
-        #---------------list frame layout--------------
-    listlayout = widget.QGridLayout()
-    listlayout.setSpacing(0)
-    listlayout.setContentsMargins(0,0,0,0)
-    listlayout.addWidget(result_list,0,0,1,1)
-        #-------------list_frame-----------------------
-    list_frame = widget.QFrame()
-    list_frame.setLayout(listlayout)
+        #---------------list frame --------------
+    list_frame = create_list_frame(result_list)
         #---------------central frame layout-----------
-    central_frame_layout = widget.QGridLayout()
-    central_frame_layout.setSpacing(0)
-    central_frame_layout.setContentsMargins(0,0,0,0)
-    central_frame_layout.setRowStretch(0,0)
-    central_frame_layout.setRowStretch(1,1)
-    central_frame_layout.setColumnStretch(0,1)
-    central_frame_layout.addWidget(control_frame,0,0)
-    central_frame_layout.addWidget(list_frame,1,0)
-        #--------------central_frame-------------------
-    central_frame = widget.QFrame()
-    central_frame.setLayout(central_frame_layout)
+    central_frame = create_central_frame(control_frame, list_frame)
         #-------------window----------------------------
     window.setCentralWidget(central_frame)
     screen_size = widget.QDesktopWidget().screenGeometry()
     window.resize (screen_size.width()//2,screen_size.height()//2)
     window.setWindowTitle('Princeton University Class Search')
     window.show()
-        #-----------initial-----------------------------
+        #-----------initial list-------------------------
     try: 
         with socket.socket() as sock: 
             sock.connect((host,port))
@@ -195,6 +204,7 @@ def main():
                 i+=1
     except Exception as ex: 
         widget.QMessageBox.critical(window,'Server Error', str(ex))
+
     sys.exit(app.exec_())
 #----------------------------------------------------------------------
 if __name__ == '__main__': 
