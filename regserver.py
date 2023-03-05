@@ -30,7 +30,7 @@ def createRow(row):
         rowstring += str(row[3])
         if len(str(row[3])) == 0: 
             rowstring+= ' '
-        rowstring += str(' '+row[4])
+        rowstring += 'space'+row[4]
         return rowstring
 # compile sqlite result string into tuple for client 
 def handle_tuple(search_list,sock):
