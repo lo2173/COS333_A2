@@ -108,34 +108,39 @@ def main():
                         type=int)
     args = parser.parse_args()
     #---------------listen---------------------------------
-    port = args.port
-    server_sock = socket.socket()
-    print('Opened socket server')
-    if os.name != 'nt': 
-         server_sock.setsockopt(
-              socket.SOL_SOCKET, socket.SO_REUSEADDR,1
-         )
-    server_sock.bind(('',port))
-    server_sock.listen()
+    try: 
+        port = args.port
+        server_sock = socket.socket()
+        print('Opened socket server')
+        if os.name != 'nt': 
+            server_sock.setsockopt(
+                socket.SOL_SOCKET, socket.SO_REUSEADDR,1
+            )
+        server_sock.bind(('',port))
+        server_sock.listen()
 
-    while True: 
-        try: 
-             #------------connect to client----------------
-             isock, client_addr = server_sock.accept()
-             with isock: 
-                  print('Accepted connection at:', client_addr)
-                  inputflo = isock.makefile(mode ='rb')
-                  print('GOT TO MAKEFILE')
-                  search_input = pickle.load(inputflo)
-                  print(type(search_input))
-                  print('Recieved input')
-                  if(type(search_input) == int): 
-                    handle_int(classid=search_input,sock=isock)
-                  else: 
-                    handle_tuple(search_list=search_input, sock=isock)
-                  print('Resolved search')
-        except Exception as ex: 
-             print(ex, file=sys.stderr)
+        while True: 
+            try: 
+                #------------connect to client----------------
+                isock, client_addr = server_sock.accept()
+                with isock: 
+                    print('Accepted connection at:', client_addr)
+                    inputflo = isock.makefile(mode ='rb')
+                    print('GOT TO MAKEFILE')
+                    search_input = pickle.load(inputflo)
+                    print(type(search_input))
+                    print('Recieved input')
+                    if(type(search_input) == int): 
+                        handle_int(classid=search_input,sock=isock)
+                    else: 
+                        handle_tuple(search_list=search_input, sock=isock)
+                    print('Resolved search')
+            except Exception as ex: 
+                print(ex, file=sys.stderr)
+                sys.exit(1)
+    except Exception as ex: 
+        print(ex,file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == '__main__': 
     main()
