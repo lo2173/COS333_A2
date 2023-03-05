@@ -47,19 +47,19 @@ def format_string(generaltable, dept_and_num, prof_table):
     formatstring = ''
     general = generaltable[0]
     wrapper = tw.TextWrapper(width = 72, break_long_words=True)
-    formatstring+='Course Id: '+general[0]+'\n'
+    formatstring+='Course Id: '+str(general[0])+'\n'
     formatstring+='\n'
-    formatstring+='Days: '+general[1]+'\n'
-    formatstring+='Start time: '+general[2]+'\n'
-    formatstring+='End time: '+general[3]+'\n'
-    formatstring+='Building: '+general[4]+'\n'
-    formatstring+='Room: '+general[5]+ '\n'
+    formatstring+='Days: '+str(general[1])+'\n'
+    formatstring+='Start time: '+str(general[2])+'\n'
+    formatstring+='End time: '+str(general[3])+'\n'
+    formatstring+='Building: '+str(general[4])+'\n'
+    formatstring+='Room: '+str(general[5])+ '\n'
     formatstring+='\n'
     for row in dept_and_num:
         formatstring+='Dept and Number: '
-        formatstring+=row[0]+' '+row[1]+'\n'
+        formatstring+=str(row[0])+' '+str(row[1])+'\n'
     formatstring+='\n'
-    formatstring+= 'Area: '+general[6]+'\n'
+    formatstring+= 'Area: '+str(general[6])+'\n'
     formatstring+='\n'
     titlestring = wrapper.wrap('Title: '+general[7])
     for line in titlestring:
