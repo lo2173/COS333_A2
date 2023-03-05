@@ -80,7 +80,7 @@ def main():
             input_data= sock.makefile(mode='wb')
             print('sent classid')
             pickle.dump(classid,input_data)
-            input.flush 
+            input_data.flush 
             flo = sock.makefile('rb')
             class_info = pickle.load(flo)
             widget.QMessageBox.information(window, 'Class Details',
