@@ -1,15 +1,6 @@
 #----------------------------------------------------------------------
 # reg.py
 # Author: Lois I Omotara
-# CHECKLIST 
-# []DEAL WITH ERROR AND CORRUPTIONS
-# []READ ME 
-# [X]GET ALL AT ONCE
-# [X]KEYBOARD FOCUS 
-# [X] WINDOWSIZE
-# [X] SLIDERS 
-# [] REMOVE DEBUG COMMENTS 
-# [X] Submit button 
 #----------------------------------------------------------------------
 import argparse as ap
 import PyQt5.QtWidgets as widget
@@ -19,7 +10,38 @@ import socket
 import pickle
 import sys
 #----------------------------------------------------------------------
-
+def control_frame(dept_label, area_label, num_label, title_label,
+                  dept, area, coursenum, title, submit): 
+        #------------- control frame layout------------
+    layout = widget.QGridLayout()
+    layout.setSpacing(4)
+    layout.setContentsMargins(4,4,4,4)
+            #--------------labels---------------------
+    layout.addWidget(dept_label,0,0,1,1)
+    layout.addWidget(area_label,1,0,1,1)
+    layout.addWidget(num_label,2,0,1,1)
+    layout.addWidget(title_label,3,0,1,1)
+            #-------------textfields-------------------
+    layout.addWidget(dept,0,1,1,1)
+    layout.addWidget(area,1,1,1,1)
+    layout.addWidget(coursenum,2,1,1,1)
+    layout.addWidget(title,3,1,1,1)
+            #-----------button-------------------------
+    layout.addWidget(submit,1,2,2,1)
+            #------------list--------------------------
+            #---------formatting-----------------------
+    layout.setRowStretch(0,0)
+    layout.setRowStretch(1,0)
+    layout.setRowStretch(2,0)
+    layout.setRowStretch(3,0)
+    layout.setColumnStretch(0,0)
+    layout.setColumnStretch(1,1)
+    layout.setColumnStretch(2,0)
+    layout.setColumnStretch(3,0)
+        #----------------control_frame------------------
+    control_frame = widget.QFrame()
+    control_frame.setLayout(layout)
+    return control_frame 
 def main(): 
     #-------------parser------------------------------
     parser = ap.ArgumentParser(prog = "reg.py", 
@@ -116,37 +138,10 @@ def main():
         except Exception as ex: 
             widget.QMessageBox.critical(window, 'Server Error',ex)
     result_list.itemActivated.connect(class_slot)         
-        #------------- control frame layout------------
-    layout = widget.QGridLayout()
-    layout.setSpacing(4)
-    layout.setContentsMargins(4,4,4,4)
-            #--------------labels---------------------
-    layout.addWidget(dept_label,0,0,1,1)
-    layout.addWidget(area_label,1,0,1,1)
-    layout.addWidget(num_label,2,0,1,1)
-    layout.addWidget(title_label,3,0,1,1)
-            #-------------textfields-------------------
-    layout.addWidget(dept,0,1,1,1)
-    layout.addWidget(area,1,1,1,1)
-    layout.addWidget(coursenum,2,1,1,1)
-    layout.addWidget(title,3,1,1,1)
-            #-----------button-------------------------
-    layout.addWidget(submit,1,2,2,1)
-            #------------list--------------------------
-    #layout.addWidget(result_list,4,0,1,3)
-            #---------formatting-----------------------
-    layout.setRowStretch(0,0)
-    layout.setRowStretch(1,0)
-    layout.setRowStretch(2,0)
-    layout.setRowStretch(3,0)
-    #layout.setRowStretch(4,1)
-    layout.setColumnStretch(0,0)
-    layout.setColumnStretch(1,1)
-    layout.setColumnStretch(2,0)
-    layout.setColumnStretch(3,0)
-        #----------------control_frame------------------
-    control_frame = widget.QFrame()
-    control_frame.setLayout(layout)
+
+        #----------------control frame-----------------
+    control_frame = control_frame(dept_label, area_label, num_label,
+        title_label,dept, area,coursenum,title)
         #---------------list frame layout--------------
     listlayout = widget.QGridLayout()
     listlayout.setSpacing(0)
