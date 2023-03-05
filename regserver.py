@@ -124,7 +124,7 @@ def main():
                   print(type(search_input))
                   print('Recieved input')
                   if(type(search_input) == int): 
-                    handle_int(input=search_input,sock=isock)
+                    handle_int(classid=search_input,sock=isock)
                   else: 
                     handle_tuple(search_list=search_input, sock=isock)
                   print('Resolved search')
