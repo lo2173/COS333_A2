@@ -122,7 +122,7 @@ def main():
                   search_input = pickle.load(input_string)
                   print("ERROR IN SERVER: "+type(search_input))
                   print('Recieved input')
-                  if(type(search_input) == int): 
+                  if(type(search_input) == 'list'): 
                     handle_int(input=search_input,sock=isock)
                   else: 
                     handle_tuple(search_list=search_input, sock=isock)
