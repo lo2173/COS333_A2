@@ -60,7 +60,7 @@ def main():
                 for result in query_result: 
                     result_list.insertItem(result) 
                     result_list.setCurrentRow(1)
-                    
+
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
     def class_slot(selected): 
@@ -82,7 +82,7 @@ def main():
             widget.QMessageBox.information(window, 'Class Details',
             class_info)
             
-    result_list.itemActivated(class_slot)         
+    result_list.itemActivated.connect(class_slot)         
         #-------------layout--------------------------
     layout = widget.QGridLayout()
     layout.setSpacing(0)
