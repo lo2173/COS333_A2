@@ -15,7 +15,7 @@ import classsearch as cs
 def createRow(row): 
         rowstring = ''
         for i in range(5 - len(str(row[0]))):
-            rowstring += 'space'
+            rowstring += ' '
         rowstring += str(row[0])
         rowstring += '  '
         rowstring += str(row[1])
