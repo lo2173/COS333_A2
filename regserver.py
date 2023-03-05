@@ -7,8 +7,8 @@ import os
 import argparse as ap
 import sys
 import socket
-import databasesearch as ds
 import pickle
+import databasesearch as ds
 import classsearch as cs
 #----------------------------------------------------------------------
 # formats raw data for listbox
@@ -29,7 +29,7 @@ def create_row(row):
     rowstring += str(row[3])
     rowstring += ' '+row[4]
     return rowstring
-# compile sqlite result string into list for client 
+# compile sqlite result string into list for client
 def handle_tuple(search_list,sock):
     try:
         result_list = []
@@ -143,20 +143,21 @@ def main():
                     print('Accepted connection at:', client_addr)
                     inputflo = isock.makefile(mode ='rb')
                     search_input = pickle.load(inputflo)
-                    if(isinstance(search_input,int)):
+                    if isinstance(search_input,int):
                         handle_int(classid=search_input,sock=isock)
                         print('Recieved command get_overview')
                     else:
-                        handle_tuple(search_list=search_input, sock=isock)
+                        handle_tuple(search_list=search_input,
+                                     sock=isock)
                         print('Recieved command get_classes')
                 print('Closed socket')
             except Exception as ex:
                 print(ex, file=sys.stderr)
                 sys.exit(1)
-    except Exception as ex: 
+    except Exception as ex:
         print(ex,file=sys.stderr)
         sys.exit(1)
 if __name__ == '__main__':
     main()
-        
+
     
