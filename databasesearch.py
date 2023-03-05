@@ -73,3 +73,14 @@ class DatabaseSearch:
             self.numsearch(num=icoursenum)
             self.titlesearch(title = ititle)
             return self.execute()
+    def getall(self): 
+        DATABASE_URL = 'file:reg.sqlite?mode=ro' 
+        with sqlite3.connect(DATABASE_URL , isolation_level= None,
+            uri= True) as connection:
+            with cl.closing(connection.cursor()) as cursor:
+                stmt_str = "SELECT classes.classid, crosslistings.dept,"
+                stmt_str+=" crosslistings.coursenum,courses.area,"
+                stmt_str+= " courses.title FROM courses, classes, "
+                stmt_str+="crosslistings "
+                cursor.execute(stmt_str)
+                return cursor.fetchall() 
