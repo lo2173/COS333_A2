@@ -7,6 +7,7 @@
 # []GET ALL AT ONCE
 # []KEYBOARD FOCUS 
 # [] WINDOWSIZE
+# [] SLIDERS 
 #----------------------------------------------------------------------
 import argparse as ap
 import PyQt5.QtWidgets as widget
@@ -64,6 +65,8 @@ def main():
                 # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
                 i = 0 
+                for item in result_list.items(): 
+                    result_list.removeItemWidget(item)
                 for result in query_result: 
                     fontresult = widget.QListWidgetItem(result)
                     fontresult.setFont(gui.QFont('Courier',10))
