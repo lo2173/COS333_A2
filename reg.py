@@ -65,8 +65,7 @@ def main():
                 # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
                 i = 0 
-                for item in result_list.items(): 
-                    result_list.removeItemWidget(item)
+                result_list.clear()
                 for result in query_result: 
                     fontresult = widget.QListWidgetItem(result)
                     fontresult.setFont(gui.QFont('Courier',10))
