@@ -129,6 +129,7 @@ def submit_slot_helper(window, host,port,inputlist,result_list):
                     Please contact the system administrator''')
                 return 
             i=0
+            result_list.clear()
             for result in query_result: 
                 fontresult = widget.QListWidgetItem(result)
                 fontresult.setFont(gui.QFont('Courier',10))
@@ -161,7 +162,6 @@ def main():
         inputlist = [dept.text(), area.text(),
         coursenum.text(),title.text()]
         submit_slot_helper(window,host,port,inputlist,result_list)
-        result_list.clear()
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
