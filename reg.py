@@ -127,8 +127,7 @@ def submit_slot_helper(window, host,port,inputlist):
                 widget.QMessageBox.critical(window, 'Server Error',
                 '''A server error occured.
                     Please contact the system administrator''')
-                return
-            i = 0 
+                return 
             return query_result
     except Exception as ex: 
         widget.QMessageBox.critical(window, 'Server Error ', ex)
@@ -157,6 +156,7 @@ def main():
         coursenum.text(),title.text()]
         query_result = submit_slot_helper(window,host,port,inputlist)
         result_list.clear()
+        i=0
         for result in query_result: 
             fontresult = widget.QListWidgetItem(result)
             fontresult.setFont(gui.QFont('Courier',10))
