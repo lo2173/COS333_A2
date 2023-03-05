@@ -87,7 +87,7 @@ def main():
             class_info)
             
     result_list.itemActivated.connect(class_slot)         
-        #-------------layout--------------------------
+        #------------- control fram layout------------
     layout = widget.QGridLayout()
     layout.setSpacing(0)
     layout.setContentsMargins(0,0,0,0)
@@ -104,14 +104,42 @@ def main():
             #-----------button-------------------------
     layout.addWidget(submit,2,2,1,1)
             #------------list--------------------------
-    layout.addWidget(result_list,4,0,1,3)
+    #layout.addWidget(result_list,4,0,1,3)
             #---------formatting-----------------------
-    layout.setRowStretch(4,3)
-    layout.setColumnStretch(1,3)
-        #----------------frame--------------------------
-    frame = widget.QFrame()
-    frame.setLayout(layout)
+    layout.setRowStretch(0,0)
+    layout.setRowStretch(1,0)
+    layout.setRowStretch(2,0)
+    layout.setRowStretch(3,0)
+    #layout.setRowStretch(4,1)
+    layout.setColumnStretch(0,0)
+    layout.setColumnStretch(1,1)
+    layout.setColumnStretch(2,0)
+    layout.setColumnStretch(3,0)
+        #----------------control_frame------------------
+    control_frame = widget.QFrame()
+    control_frame.setLayout(layout)
+        #---------------list frame layout--------------
+    listlayout = widget.QGridLayout()
+    listlayout.setSpacing(0)
+    listlayout.setContentsMargins(0,0,0,0)
+    listlayout.addWidget(result_list,0,0,1,1)
+        #-------------list_frame-----------------------
+    list_frame = widget.QFrame()
+    list_frame.setLayout(listlayout)
+        #---------------central frame layout-----------
+    central_frame_layout = widget.QGridLayout()
+    central_frame_layout.setSpacing(0)
+    central_frame_layout.setContentsMargins(0,0,0,0)
+    central_frame_layout.setRowStretch(0,0)
+    central_frame_layout.setRowStretch(1,1)
+    central_frame_layout.setColumnStretch(0,1)
+    central_frame_layout.addWidget(control_frame,0,0)
+    central_frame_layout.addWidget(list_frame,1,0)
+        #--------------central_frame-------------------
+    central_frame = widget.QFrame()
+    central_frame.setLayout(central_frame_layout)
         #-------------window----------------------------
+    
     window = widget.QMainWindow()
     window.setCentralWidget(frame)
     screen_size = widget.QDesktopWidget().screenGeometry()
