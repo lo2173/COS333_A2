@@ -87,6 +87,13 @@ def handle_int(classid, sock):
     classstring = str(classid)
     search = cs.ClassSearch(classstring)
     gen = search.get_general()
+    if bool(gen) is False:
+        flo = sock.makefile(mode='wb')
+        pickle.dump(False,flo)
+        flo.flush()
+        print('no class with classid '+classstring+' exists',
+        file=sys.stderr)
+        return 
     d_and_n = search.get_deptandnum()
     profs = search.get_prof()
     searchresult = format_string(generaltable = gen, 

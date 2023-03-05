@@ -109,12 +109,17 @@ def main():
                 classid += int(selected_split[1])
             else: 
                 classid += int(selected_split[0])
+            classid = 0000
             input_data= sock.makefile(mode='wb')
             print('sent classid')
             pickle.dump(classid,input_data)
             input_data.flush()
             flo = sock.makefile('rb')
             class_info = pickle.load(flo)
+            if flo is False: 
+                print('no class with classid '+str(classid)+' exists',
+                file=sys.stderr)
+                return 
             widget.QMessageBox.information(window, 'Class Details',
             class_info)
             
