@@ -9,7 +9,7 @@
 # [X] WINDOWSIZE
 # [X] SLIDERS 
 # [] REMOVE DEBUG COMMENTS 
-# [] Submit button 
+# [X] Submit button 
 #----------------------------------------------------------------------
 import argparse as ap
 import PyQt5.QtWidgets as widget
