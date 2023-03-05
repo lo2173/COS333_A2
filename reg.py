@@ -101,7 +101,7 @@ def main():
                         result_list.setCurrentRow(0)
                         i+=1
             except Exception as ex: 
-                widget.QMessageBox.warning(window, ex)
+                widget.QMessageBox.warning(window, 'ERROR', ex)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
