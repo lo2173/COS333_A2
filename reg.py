@@ -49,6 +49,8 @@ def main():
     submit = widget.QPushButton('Submit')
         #-------------list box------------------------
     result_list = widget.QListWidget()
+        #------------window---------------------------
+    window = widget.QMainWindow()
             #---------initial------------------------
     try: 
         with socket.socket() as sock: 
@@ -183,8 +185,6 @@ def main():
     central_frame = widget.QFrame()
     central_frame.setLayout(central_frame_layout)
         #-------------window----------------------------
-    
-    window = widget.QMainWindow()
     window.setCentralWidget(central_frame)
     screen_size = widget.QDesktopWidget().screenGeometry()
     window.resize (screen_size.width()//2,screen_size.height()//2)
