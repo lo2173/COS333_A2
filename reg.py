@@ -141,7 +141,7 @@ def main():
 
         #----------------control frame-----------------
     control_frame = create_control_frame(dept_label, area_label,
-        num_label,title_label,dept, area,coursenum,title,submit=)
+        num_label,title_label,dept, area,coursenum,title,submit)
         #---------------list frame layout--------------
     listlayout = widget.QGridLayout()
     listlayout.setSpacing(0)
