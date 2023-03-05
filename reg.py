@@ -71,18 +71,6 @@ def create_central_frame(control_frame, list_frame):
     central_frame.setLayout(central_frame_layout)
     return central_frame
 
-def parser(): 
-    #-------------parser------------------------------
-    parser = ap.ArgumentParser(prog = "reg.py",
-    usage= "reg.py [-h] host port",
-    description= "Client for the registrar application")
-    parser.add_argument('host',
-    help="the host on which the server is running")
-    parser.add_argument('port',
-    help="the port at which the server is listening",
-    type=int)
-    return parser.parse_args()
-
 def initialize_list(host, port,window,result_list): 
     try: 
         with socket.socket() as sock: 
@@ -135,7 +123,15 @@ def submit_slot_helper(window, host,port,inputlist):
         widget.QMessageBox.critical(window, 'Server Error ', ex)
     
 def main():
-    args = parser()
+    parser = ap.ArgumentParser(prog = "reg.py",
+    usage= "reg.py [-h] host port",
+    description= "Client for the registrar application")
+    parser.add_argument('host',
+    help="the host on which the server is running")
+    parser.add_argument('port',
+    help="the port at which the server is listening",
+    type=int)
+    args= parser.parse_args()
     host = args.host
     port = args.port
     #-----------gui-----------------------------------
@@ -153,7 +149,6 @@ def main():
     window = widget.QMainWindow()
         #--------------submit button slot------------------
     def submit_slot():
-        #-------------client----------------------
         print('GOT HERE')
         inputlist = [dept.text(), area.text(),
         coursenum.text(),title.text()]
