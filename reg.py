@@ -71,7 +71,7 @@ def main():
                 result_list.setCurrentRow(0)
                 i+=1
     except Exception as ex: 
-        widget.QMessageBox.warning(ex)
+        widget.QMessageBox.warning(window, ex)
         #--------------submit button slot------------------
     def submit_slot(): 
             #-------------client----------------------
@@ -99,7 +99,7 @@ def main():
                         result_list.setCurrentRow(0)
                         i+=1
             except Exception as ex: 
-                widget.QMessageBox.warning(ex)
+                widget.QMessageBox.warning(window, ex)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
@@ -129,7 +129,7 @@ def main():
                 widget.QMessageBox.information(window, 'Class Details',
                 class_info)
         except Exception as ex: 
-            widget.QMessageBox.warning(ex)
+            widget.QMessageBox.warning(window, ex)
     result_list.itemActivated.connect(class_slot)         
         #------------- control frame layout------------
     layout = widget.QGridLayout()
