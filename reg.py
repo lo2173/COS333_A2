@@ -17,6 +17,7 @@ import PyQt5.QtGui as gui
 import sys
 import socket 
 import pickle
+import sys
 #----------------------------------------------------------------------
 
 def main(): 
@@ -72,27 +73,30 @@ def main():
     def submit_slot(): 
             #-------------client----------------------
             # have to deal with security 
-            with socket.socket() as sock: 
-                sock.connect((host,port))
-                print('Connected to server')
-            #--------------text data----------------------
-                inputlist = [dept.text(), area.text(),coursenum.text() 
-                ,title.text()]
-                inputflo = sock.makefile(mode='wb')
-                pickle.dump(inputlist,inputflo)
-                inputflo.flush()
-                print("Sent command get_classes")
-                flo = sock.makefile(mode='rb')
-                query_result = pickle.load(flo)
-                print('Recieved classes')
-                i = 0 
-                result_list.clear()
-                for result in query_result: 
-                    fontresult = widget.QListWidgetItem(result)
-                    fontresult.setFont(gui.QFont('Courier',10))
-                    result_list.insertItem(i, fontresult) 
-                    result_list.setCurrentRow(0)
-                    i+=1
+            try: 
+                with socket.socket() as sock: 
+                    sock.connect((host,port))
+                    print('Connected to server')
+                #--------------text data----------------------
+                    inputlist = [dept.text(), area.text(),coursenum.text() 
+                    ,title.text()]
+                    inputflo = sock.makefile(mode='wb')
+                    pickle.dump(inputlist,inputflo)
+                    inputflo.flush()
+                    print("Sent command get_classes")
+                    flo = sock.makefile(mode='rb')
+                    query_result = pickle.load(flo)
+                    print('Recieved classes')
+                    i = 0 
+                    result_list.clear()
+                    for result in query_result: 
+                        fontresult = widget.QListWidgetItem(result)
+                        fontresult.setFont(gui.QFont('Courier',10))
+                        result_list.insertItem(i, fontresult) 
+                        result_list.setCurrentRow(0)
+                        i+=1
+            except Exception as ex: 
+                print(ex,file=sys.stderr)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
