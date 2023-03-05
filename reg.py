@@ -51,7 +51,7 @@ def main():
                 ,title.text()]
                 inputflo = sock.makefile(mode='wb')
                 pickle.dump(inputlist,inputflo)
-                inputflo.flush
+                inputflo.flush()
                 print("Sent command: get overviews")
                 flo = sock.makefile(mode='rb')
                 # will need to recieve a list where each item is a row of the query result
@@ -80,7 +80,7 @@ def main():
             input_data= sock.makefile(mode='wb')
             print('sent classid')
             pickle.dump(classid,input_data)
-            input_data.flush 
+            input_data.flush()
             flo = sock.makefile('rb')
             class_info = pickle.load(flo)
             widget.QMessageBox.information(window, 'Class Details',

@@ -121,7 +121,7 @@ def main():
                   inputflo = isock.makefile(mode ='rb')
                   print('GOT TO MAKEFILE')
                   search_input = pickle.load(inputflo)
-                  print("ERROR IN SERVER: ",type(search_input))
+                  print(type(search_input))
                   print('Recieved input')
                   if(type(search_input) == int): 
                     handle_int(input=search_input,sock=isock)
