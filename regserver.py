@@ -2,33 +2,33 @@
 # regserver.py
 # Author: Lois I. Omotara
 #----------------------------------------------------------------------
-import databasesearch as ds
-import socket
-import sys
-import argparse as ap
-import pickle
-import os
 import textwrap as tw
+import os
+import argparse as ap
+import sys
+import socket
+import databasesearch as ds
+import pickle
 import classsearch as cs
 #----------------------------------------------------------------------
 # formats raw data for listbox
-def createRow(row):
-        rowstring = ''
-        for i in range(5 - len(str(row[0]))):
-            rowstring += ' '
-        rowstring += str(row[0])
-        rowstring += '  '
-        rowstring += str(row[1])
-        for i in range (6 - len(str(row[2]))):
-            rowstring+=' '
+def create_row(row):
+    rowstring = ''
+    for i in range(5 - len(str(row[0]))):
         rowstring += ' '
-        rowstring += str(row[2])
+    rowstring += str(row[0])
+    rowstring += '  '
+    rowstring += str(row[1])
+    for i in range (6 - len(str(row[2]))):
+        rowstring+=' '
+    rowstring += ' '
+    rowstring += str(row[2])
+    rowstring += ' '
+    for i in range(4-len(str(row[3]))):
         rowstring += ' '
-        for i in range(4-len(str(row[3]))):
-            rowstring += ' '
-        rowstring += str(row[3])
-        rowstring += ' '+row[4]
-        return rowstring
+    rowstring += str(row[3])
+    rowstring += ' '+row[4]
+    return rowstring
 # compile sqlite result string into list for client 
 def handle_tuple(search_list,sock):
     try:
@@ -40,11 +40,11 @@ def handle_tuple(search_list,sock):
             iarea=search_list[1],icoursenum=search_list[2],
             ititle=search_list[3])
         for irow in rawresults:
-            result_list.append(createRow(row=irow))
+            result_list.append(create_row(row=irow))
         flo = sock.makefile(mode='wb')
         pickle.dump(result_list,flo)
         flo.flush()
-    except Exception as ex : 
+    except Exception as ex :
         print(ex, file=sys.stderr)
         flo = sock.makefile(mode='wb')
         pickle.dump('Error',flo)
@@ -113,7 +113,7 @@ def handle_int(classid, sock):
         print(ex,file=sys.stderr)
     print('Wrote to client')
 
-# connect to client 
+# connect to client
 def main():
     #--------------------parser-------------------------------
     parser = ap.ArgumentParser(prog='regserver.py',
@@ -143,7 +143,7 @@ def main():
                     print('Accepted connection at:', client_addr)
                     inputflo = isock.makefile(mode ='rb')
                     search_input = pickle.load(inputflo)
-                    if(type(search_input) == int):
+                    if(isinstance(search_input,int)):
                         handle_int(classid=search_input,sock=isock)
                         print('Recieved command get_overview')
                     else:
@@ -156,8 +156,7 @@ def main():
     except Exception as ex: 
         print(ex,file=sys.stderr)
         sys.exit(1)
-
-if __name__ == '__main__': 
+if __name__ == '__main__':
     main()
         
     
