@@ -117,9 +117,9 @@ def main():
              isock, client_addr = server_sock.accept()
              with isock: 
                   print('Accepted connection at:', client_addr)
-                  input_data = isock.makefile(mode ='rb')
+                  inputflo = isock.makefile(mode ='rb')
                   print('GOT TO MAKEFILE')
-                  search_input = pickle.load(input_data)
+                  search_input = pickle.load(inputflo)
                   print("ERROR IN SERVER: "+type(search_input))
                   print('Recieved input')
                   if(type(search_input) == int): 

@@ -77,9 +77,9 @@ def main():
                 classid += int(selected_split[1])
             else: 
                 classid += int(selected_split[0])
-            input = sock.makefile(mode='wb')
+            input_data= sock.makefile(mode='wb')
             print('sent classid')
-            pickle.dump(classid,input)
+            pickle.dump(classid,input_data)
             input.flush 
             flo = sock.makefile('rb')
             class_info = pickle.load(flo)
