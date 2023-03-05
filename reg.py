@@ -51,29 +51,6 @@ def main():
     result_list = widget.QListWidget()
         #------------window---------------------------
     window = widget.QMainWindow()
-            #---------initial------------------------
-    try: 
-        with socket.socket() as sock: 
-            sock.connect((host,port))
-            print('Connected to server')
-            #--------------text data----------------------
-            inputlist = ['','','','']
-            inputflo = sock.makefile(mode='wb')
-            pickle.dump(inputlist,inputflo)
-            inputflo.flush()
-            print("Sent command: get overviews")
-            flo = sock.makefile(mode='rb')
-            # will need to recieve a list where each item is a row of the query result
-            query_result = pickle.load(flo)
-            i = 0 
-            for result in query_result: 
-                fontresult = widget.QListWidgetItem(result)
-                fontresult.setFont(gui.QFont('Courier',10))
-                result_list.insertItem(i, fontresult) 
-                result_list.setCurrentRow(0)
-                i+=1
-    except Exception as ex: 
-        widget.QMessageBox.warning(window,'ERROR', str(ex))
         #--------------submit button slot------------------
     def submit_slot(): 
             #-------------client----------------------
@@ -190,6 +167,29 @@ def main():
     window.resize (screen_size.width()//2,screen_size.height()//2)
     window.setWindowTitle('Princeton University Class Search')
     window.show()
+        #-----------initial-----------------------------
+    try: 
+        with socket.socket() as sock: 
+            sock.connect((host,port))
+            print('Connected to server')
+            #--------------text data----------------------
+            inputlist = ['','','','']
+            inputflo = sock.makefile(mode='wb')
+            pickle.dump(inputlist,inputflo)
+            inputflo.flush()
+            print("Sent command: get overviews")
+            flo = sock.makefile(mode='rb')
+            # will need to recieve a list where each item is a row of the query result
+            query_result = pickle.load(flo)
+            i = 0 
+            for result in query_result: 
+                fontresult = widget.QListWidgetItem(result)
+                fontresult.setFont(gui.QFont('Courier',10))
+                result_list.insertItem(i, fontresult) 
+                result_list.setCurrentRow(0)
+                i+=1
+    except Exception as ex: 
+        widget.QMessageBox.critical(window,'Server Error', str(ex))
     sys.exit(app.exec_())
 #----------------------------------------------------------------------
 if __name__ == '__main__': 
