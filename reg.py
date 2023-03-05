@@ -68,6 +68,10 @@ def main():
                     print("Sent command get_classes")
                     flo = sock.makefile(mode='rb')
                     query_result = pickle.load(flo)
+                    if query_result == 'Error': 
+                        widget.QMessageBox.critical(window, 'Server Error', 
+                        'A server error occured. Please contact the system administrator')
+                        return
                     print('Recieved classes')
                     i = 0 
                     result_list.clear()
@@ -78,7 +82,7 @@ def main():
                         result_list.setCurrentRow(0)
                         i+=1
             except Exception as ex: 
-                widget.QMessageBox.warning(window, 'ERROR', ex)
+                widget.QMessageBox.critical(window, 'Server Error ', ex)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
@@ -104,11 +108,15 @@ def main():
                     print('No class with classid '+str(classid)+' exists',
                     file=sys.stderr)
                     return
+                if class_info == 'Error': 
+                    widget.QMessageBox.critical(window, 'Server Error', 
+                    'A server error occured. Please contact the system administrator')
+                    return
                 print('Recieved overview')
                 widget.QMessageBox.information(window, 'Class Details',
                 class_info)
         except Exception as ex: 
-            widget.QMessageBox.warning(window, ex)
+            widget.QMessageBox.critical(window, 'Server Error',ex)
     result_list.itemActivated.connect(class_slot)         
         #------------- control frame layout------------
     layout = widget.QGridLayout()
@@ -181,6 +189,10 @@ def main():
             flo = sock.makefile(mode='rb')
             # will need to recieve a list where each item is a row of the query result
             query_result = pickle.load(flo)
+            if query_result == 'Error': 
+                widget.QMessageBox.critical(window, 'Server Error', 
+                'A server error occured. Please contact the system administrator')
+                return
             i = 0 
             for result in query_result: 
                 fontresult = widget.QListWidgetItem(result)

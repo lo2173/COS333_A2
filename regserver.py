@@ -32,20 +32,26 @@ def createRow(row):
         return rowstring
 # compile sqlite result string into tuple for client 
 def handle_tuple(search_list,sock):
-    result_list = []
-    search = ds.DatabaseSearch()
-    rawresults = None
-    if search_list:
-        rawresults = search.fullsearch(idept=search_list[0], 
-        iarea=search_list[1],icoursenum=search_list[2],
-        ititle=search_list[3])
-    else: 
-        rawresults = search.getall()
-    for irow in rawresults: 
-        result_list.append(createRow(row=irow))
-    flo = sock.makefile(mode='wb')
-    pickle.dump(result_list,flo)
-    flo.flush()
+    try: 
+        result_list = []
+        search = ds.DatabaseSearch()
+        rawresults = None
+        if search_list:
+            rawresults = search.fullsearch(idept=search_list[0], 
+            iarea=search_list[1],icoursenum=search_list[2],
+            ititle=search_list[3])
+        else: 
+            rawresults = search.getall()
+        for irow in rawresults: 
+            result_list.append(createRow(row=irow))
+        flo = sock.makefile(mode='wb')
+        pickle.dump(result_list,flo)
+        flo.flush()
+    except Exception as ex : 
+        print(ex, file=sys.stderr)
+        flo = sock.makefile(mode='wb')
+        pickle.dump('Error',flo)
+        flo.flush()
     print('Wrote to client')
 
 def format_string(generaltable, dept_and_num, prof_table):
@@ -83,25 +89,31 @@ def format_string(generaltable, dept_and_num, prof_table):
     return formatstring
 
 def handle_int(classid, sock): 
-    searchresult = ''
-    classstring = str(classid)
-    search = cs.ClassSearch(classstring)
-    gen = search.get_general()
-    if bool(gen) is False:
+    try: 
+        searchresult = ''
+        classstring = str(classid)
+        search = cs.ClassSearch(classstring)
+        gen = search.get_general()
+        if bool(gen) is False:
+            flo = sock.makefile(mode='wb')
+            pickle.dump(False,flo)
+            flo.flush()
+            print('no class with classid '+classstring+' exists',
+            file=sys.stderr)
+            return 
+        d_and_n = search.get_deptandnum()
+        profs = search.get_prof()
+        searchresult = format_string(generaltable = gen, 
+        dept_and_num=d_and_n,
+        prof_table=profs)
         flo = sock.makefile(mode='wb')
-        pickle.dump(False,flo)
+        pickle.dump(searchresult,flo)
         flo.flush()
-        print('no class with classid '+classstring+' exists',
-        file=sys.stderr)
-        return 
-    d_and_n = search.get_deptandnum()
-    profs = search.get_prof()
-    searchresult = format_string(generaltable = gen, 
-    dept_and_num=d_and_n,
-    prof_table=profs)
-    flo = sock.makefile(mode='wb')
-    pickle.dump(searchresult,flo)
-    flo.flush()
+    except Exception as ex: 
+        flo = sock.makefile(mode='wb')
+        pickle.dump('Error',flo)
+        flo.flush()
+        print(ex,file=sys.stderr)
     print('Wrote to client')
 
 # connect to client 
