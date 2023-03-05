@@ -170,6 +170,13 @@ def list_slot_helper(selected_item,host,port,window):
             class_info)
     except Exception as ex: 
         widget.QMessageBox.critical(window, 'Server Error',ex)
+
+def create_window(window,central_frame): 
+    window.setCentralWidget(central_frame)
+    screen_size = widget.QDesktopWidget().screenGeometry()
+    window.resize (screen_size.width()//2,screen_size.height()//2)
+    window.setWindowTitle('Princeton University Class Search')
+
 def main():
     args = parser()
     host = args.host
@@ -198,7 +205,7 @@ def main():
         #--------------list option slot------------------
     def class_slot(selected_item):
         list_slot_helper(selected_item,host,port,window)
-        
+
     result_list.itemActivated.connect(class_slot)         
         #----------------control frame-----------------
     control_frame = create_control_frame(dept, coursenum, area,
@@ -208,10 +215,7 @@ def main():
         #---------------central frame layout-----------
     central_frame = create_central_frame(control_frame, list_frame)
         #-------------window----------------------------
-    window.setCentralWidget(central_frame)
-    screen_size = widget.QDesktopWidget().screenGeometry()
-    window.resize (screen_size.width()//2,screen_size.height()//2)
-    window.setWindowTitle('Princeton University Class Search')
+    create_window(window,central_frame)
     window.show()
     initialize_list(host,port,window,result_list)
     #-----------initial list-------------------------
