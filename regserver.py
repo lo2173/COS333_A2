@@ -115,9 +115,11 @@ def main():
         try: 
              #------------connect to client----------------
              isock, client_addr = server_sock.accept()
+             search_input
              with isock: 
                   print('Accepted connection at:', client_addr)
-                  input_string = isock.makefile(mode='rb')
+                  input_string = isock.makefile(mode ='rb')
+                  print('GOT TO MAKEFILE')
                   search_input = pickle.load(input_string)
                   print("ERROR IN SERVER: "+type(search_input))
                   print('Recieved input')
