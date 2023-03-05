@@ -3,16 +3,20 @@
 # Author: Lois I Omotara
 #----------------------------------------------------------------------
 import argparse as ap
-import PyQt5.QtWidgets as widget
-import PyQt5.QtGui as gui
 import sys
 import socket
 import pickle
-import sys
+import PyQt5.QtWidgets as widget
+import PyQt5.QtGui as gui
 #----------------------------------------------------------------------
-def create_control_frame(dept_label, area_label, num_label, title_label,
-                  dept, area, coursenum, title, submit):
+def create_control_frame(dept, coursenum, area, title,submit):
     #------------- control frame layout------------
+    dept_label = widget.QLabel(' Dept:')
+    num_label = widget.QLabel(' Number: ')
+    area_label = widget.QLabel(' Area: ')
+    title_label = widget.QLabel(' Title: ')
+        #-------------submit button-------------------
+    submit = widget.QPushButton('Submit')
     layout = widget.QGridLayout()
     layout.setSpacing(4)
     layout.setContentsMargins(4,4,4,4)
@@ -67,7 +71,7 @@ def create_central_frame(control_frame, list_frame):
     central_frame.setLayout(central_frame_layout)
     return central_frame
 
-def main():
+def parser(): 
     #-------------parser------------------------------
     parser = ap.ArgumentParser(prog = "reg.py",
     usage= "reg.py [-h] host port",
@@ -77,17 +81,72 @@ def main():
     parser.add_argument('port',
     help="the port at which the server is listening",
     type=int)
-    args = parser.parse_args()
+    return parser.parse_args()
+
+def initialize_list(host, port,window,result_list): 
+    try: 
+        with socket.socket() as sock: 
+            sock.connect((host,port))
+            print('Connected to server')
+            #--------------text data----------------------
+            inputlist = ['','','','']
+            inputflo = sock.makefile(mode='wb')
+            pickle.dump(inputlist,inputflo)
+            inputflo.flush()
+            print("Sent command get_classes")
+            flo = sock.makefile(mode='rb')
+            # will need to recieve a list where each item is a row of the query result
+            query_result = pickle.load(flo)
+            if query_result == 'Error': 
+                widget.QMessageBox.critical(window, 'Server Error', 
+                '''A server error occured.
+                 Please contact the system administrator''')
+                return
+            i = 0
+            for result in query_result:
+                fontresult = widget.QListWidgetItem(result)
+                fontresult.setFont(gui.QFont('Courier',10))
+                result_list.insertItem(i, fontresult)
+                result_list.setCurrentRow(0)
+                i+=1
+    except Exception as ex:
+        widget.QMessageBox.critical(window,'Server Error', str(ex))
+
+def submit_slot_helper(window, host,port,inputlist,result_list): 
+    try:
+        with socket.socket() as sock:
+            sock.connect((host,port))
+            print('Connected to server')
+        #--------------text data----------------------
+            inputflo = sock.makefile(mode='wb')
+            pickle.dump(inputlist,inputflo)
+            inputflo.flush()
+            print("Sent command get_classes")
+            flo = sock.makefile(mode='rb')
+            query_result = pickle.load(flo)
+            if query_result == 'Error':
+                widget.QMessageBox.critical(window, 'Server Error',
+                '''A server error occured.
+                    Please contact the system administrator''')
+                return
+            i = 0 
+            result_list.clear()
+            for result in query_result: 
+                fontresult = widget.QListWidgetItem(result)
+                fontresult.setFont(gui.QFont('Courier',10))
+                result_list.insertItem(i, fontresult) 
+                result_list.setCurrentRow(0)
+                i+=1
+    except Exception as ex: 
+        widget.QMessageBox.critical(window, 'Server Error ', ex)
+    
+def main():
+    args = parser()
     host = args.host
     port = args.port
     #-----------gui-----------------------------------
     app = widget.QApplication(sys.argv)
-        #--------------labels------------------------
-    dept_label = widget.QLabel(' Dept:')
-    num_label = widget.QLabel(' Number: ')
-    area_label = widget.QLabel(' Area: ')
-    title_label = widget.QLabel(' Title: ')
-        #--------------text fields--------------------
+        #----------text fields------------------------
     dept = widget.QLineEdit('')
     coursenum = widget.QLineEdit('')
     area = widget.QLineEdit('')
@@ -100,35 +159,10 @@ def main():
     window = widget.QMainWindow()
         #--------------submit button slot------------------
     def submit_slot():
-            #-------------client----------------------
-            try:
-                with socket.socket() as sock:
-                    sock.connect((host,port))
-                    print('Connected to server')
-                #--------------text data----------------------
-                    inputlist = [dept.text(), area.text(),
-                    coursenum.text(),title.text()]
-                    inputflo = sock.makefile(mode='wb')
-                    pickle.dump(inputlist,inputflo)
-                    inputflo.flush()
-                    print("Sent command get_classes")
-                    flo = sock.makefile(mode='rb')
-                    query_result = pickle.load(flo)
-                    if query_result == 'Error':
-                        widget.QMessageBox.critical(window, 'Server Error', 
-                        '''A server error occured.
-                         Please contact the system administrator''')
-                        return
-                    i = 0 
-                    result_list.clear()
-                    for result in query_result: 
-                        fontresult = widget.QListWidgetItem(result)
-                        fontresult.setFont(gui.QFont('Courier',10))
-                        result_list.insertItem(i, fontresult) 
-                        result_list.setCurrentRow(0)
-                        i+=1
-            except Exception as ex: 
-                widget.QMessageBox.critical(window, 'Server Error ', ex)
+        #-------------client----------------------
+        inputlist = [dept.text(), area.text(),
+        coursenum.text(),title.text()]
+        submit_slot_helper(window,host,port,inputlist,result_list)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
@@ -166,8 +200,8 @@ def main():
 
     result_list.itemActivated.connect(class_slot)         
         #----------------control frame-----------------
-    control_frame = create_control_frame(dept_label, area_label,
-        num_label,title_label,dept, area,coursenum,title,submit)
+    control_frame = create_control_frame(dept, coursenum, area,
+        title,submit)
         #---------------list frame --------------
     list_frame = create_list_frame(result_list)
         #---------------central frame layout-----------
@@ -178,35 +212,8 @@ def main():
     window.resize (screen_size.width()//2,screen_size.height()//2)
     window.setWindowTitle('Princeton University Class Search')
     window.show()
-        #-----------initial list-------------------------
-    try: 
-        with socket.socket() as sock: 
-            sock.connect((host,port))
-            print('Connected to server')
-            #--------------text data----------------------
-            inputlist = ['','','','']
-            inputflo = sock.makefile(mode='wb')
-            pickle.dump(inputlist,inputflo)
-            inputflo.flush()
-            print("Sent command get_classes")
-            flo = sock.makefile(mode='rb')
-            # will need to recieve a list where each item is a row of the query result
-            query_result = pickle.load(flo)
-            if query_result == 'Error': 
-                widget.QMessageBox.critical(window, 'Server Error', 
-                '''A server error occured.
-                 Please contact the system administrator''')
-                return
-            i = 0
-            for result in query_result:
-                fontresult = widget.QListWidgetItem(result)
-                fontresult.setFont(gui.QFont('Courier',10))
-                result_list.insertItem(i, fontresult)
-                result_list.setCurrentRow(0)
-                i+=1
-    except Exception as ex:
-        widget.QMessageBox.critical(window,'Server Error', str(ex))
-
+    initialize_list(host,port,window,result_list)
+    #-----------initial list-------------------------
     sys.exit(app.exec_())
 #----------------------------------------------------------------------
 if __name__ == '__main__':
