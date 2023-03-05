@@ -71,7 +71,7 @@ def main():
                 result_list.setCurrentRow(0)
                 i+=1
     except Exception as ex: 
-        print(sys.argv[0],ex,file=sys.stderr)
+        widget.QMessageBox.warning(ex)
         #--------------submit button slot------------------
     def submit_slot(): 
             #-------------client----------------------
@@ -99,35 +99,37 @@ def main():
                         result_list.setCurrentRow(0)
                         i+=1
             except Exception as ex: 
-                print(ex,file=sys.stderr)
+                widget.QMessageBox.warning(ex)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
     def class_slot(selected_item):
-        selected = selected_item.text()
-        with socket.socket() as sock: 
-            sock.connect((host,port))
-            print('Connected to server')
-            selected_split = selected.split(' ')
-            classid = 0
-            if len(selected_split[0])< 3: 
-                classid += int(selected_split[1])
-            else: 
-                classid += int(selected_split[0])
-            input_data= sock.makefile(mode='wb')
-            pickle.dump(classid,input_data)
-            input_data.flush()
-            print('Sent commmand get_overview')
-            flo = sock.makefile('rb')
-            class_info = pickle.load(flo)
-            if class_info is False: 
-                print('No class with classid '+str(classid)+' exists',
-                file=sys.stderr)
-                return
-            print('Recieved overview')
-            widget.QMessageBox.information(window, 'Class Details',
-            class_info)
-            
+        try: 
+            selected = selected_item.text()
+            with socket.socket() as sock: 
+                sock.connect((host,port))
+                print('Connected to server')
+                selected_split = selected.split(' ')
+                classid = 0
+                if len(selected_split[0])< 3: 
+                    classid += int(selected_split[1])
+                else: 
+                    classid += int(selected_split[0])
+                input_data= sock.makefile(mode='wb')
+                pickle.dump(classid,input_data)
+                input_data.flush()
+                print('Sent commmand get_overview')
+                flo = sock.makefile('rb')
+                class_info = pickle.load(flo)
+                if class_info is False: 
+                    print('No class with classid '+str(classid)+' exists',
+                    file=sys.stderr)
+                    return
+                print('Recieved overview')
+                widget.QMessageBox.information(window, 'Class Details',
+                class_info)
+        except Exception as ex: 
+            widget.QMessageBox.warning(ex)
     result_list.itemActivated.connect(class_slot)         
         #------------- control frame layout------------
     layout = widget.QGridLayout()
