@@ -50,6 +50,7 @@ def main():
             # have to deal with security 
             with socket.socket() as sock: 
                 sock.connect((host,port))
+                print('Connected to server')
                 input = sock.makefile(mode='wb')
                 pickle.dump(inputlist,input)
                 input.flush
@@ -57,9 +58,11 @@ def main():
                 flo = sock.makefile(mode='rb')
                 # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
+                i = 0 
                 for result in query_result: 
-                    result_list.insertItem(result) 
+                    result_list.insertItem(i, result) 
                     result_list.setCurrentRow(1)
+                    i+=1
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
