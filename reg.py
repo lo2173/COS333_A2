@@ -141,9 +141,9 @@ def main():
         #-------------window----------------------------
     
     window = widget.QMainWindow()
-    window.setCentralWidget(frame)
+    window.setCentralWidget(central_frame)
     screen_size = widget.QDesktopWidget().screenGeometry()
-    window.resize = (screen_size.width()//2,screen_size.height()//2)
+    window.resize = (screen_size.width(),screen_size.height()//2)
     window.setWindowTitle('Princeton University Class Search')
     window.show()
     sys.exit(app.exec_())
