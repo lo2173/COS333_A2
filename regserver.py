@@ -98,7 +98,8 @@ def main():
     usage='regserver.py [-h] port',
     description='Server for the registrar application')
     parser.add_argument('port',
-    help='the port at which the server should listen')
+                        help='the port at which the server should listen',
+                        type=int)
     args = parser.parse_args()
     #---------------listen---------------------------------
     port = args.port
