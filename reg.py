@@ -1,6 +1,12 @@
 #----------------------------------------------------------------------
 # reg.py
 # Author: Lois I Omotara
+# CHECKLIST 
+# []DEAL WITH ERRORS 
+# []READ ME 
+# []GET ALL AT ONCE
+# []KEYBOARD FOCUS 
+# [] WINDOWSIZE
 #----------------------------------------------------------------------
 import argparse as ap
 import PyQt5.QtWidgets as widget
@@ -8,7 +14,6 @@ import PyQt5.QtGui as gui
 import sys
 import socket 
 import pickle
-# 
 #----------------------------------------------------------------------
 
 def main(): 
@@ -147,7 +152,7 @@ def main():
     window = widget.QMainWindow()
     window.setCentralWidget(central_frame)
     screen_size = widget.QDesktopWidget().screenGeometry()
-    window.resize = (screen_size.width(),screen_size.height()//2)
+    window.resize = (screen_size.width(),screen_size.height())
     window.setWindowTitle('Princeton University Class Search')
     window.show()
     sys.exit(app.exec_())
