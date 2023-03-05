@@ -47,7 +47,7 @@ def main():
                 sock.connect((host,port))
                 print('Connected to server')
             #--------------text data----------------------
-                inputlist = [dept.text(), coursenum.text(), area.text()
+                inputlist = [dept.text(), area.text(),coursenum.text() 
                 ,title.text()]
                 inputflo = sock.makefile(mode='wb')
                 pickle.dump(inputlist,inputflo)
