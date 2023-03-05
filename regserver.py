@@ -28,17 +28,19 @@ def createRow(row):
             rowstring += ' '
             print('NUM SPACE=',i)
         rowstring += str(row[3])
-        if len(str(row[3])) == 0: 
-            rowstring+= ' '
-        rowstring += 'space'+row[4]
+        rowstring += ' '+row[4]
         return rowstring
 # compile sqlite result string into tuple for client 
 def handle_tuple(search_list,sock):
     result_list = []
     search = ds.DatabaseSearch()
-    rawresults = search.fullsearch(idept=search_list[0], 
-    iarea=search_list[1],icoursenum=search_list[2],
-    ititle=search_list[3])
+    rawresults = None
+    if search_list:
+        rawresults = search.fullsearch(idept=search_list[0], 
+        iarea=search_list[1],icoursenum=search_list[2],
+        ititle=search_list[3])
+    else: 
+        rawresults = search.getall()
     for irow in rawresults: 
         result_list.append(createRow(row=irow))
     flo = sock.makefile(mode='wb')

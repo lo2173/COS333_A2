@@ -4,6 +4,7 @@
 #----------------------------------------------------------------------
 import argparse as ap
 import PyQt5.QtWidgets as widget
+import PyQt5.QtGui as gui
 import sys
 import socket 
 import pickle
@@ -39,6 +40,25 @@ def main():
     submit = widget.QPushButton('submit')
         #-------------list box------------------------
     result_list = widget.QListWidget()
+            #---------initial------------------------
+    with socket.socket() as sock: 
+        sock.connect((host,port))
+        print('Connected to server')
+        inputlist = []
+        inputflo = sock.makefile(mode='wb')
+        pickle.dump(inputlist,inputflo)
+        inputflo.flush()
+        print("Sent command: get overviews")
+        flo = sock.makefile(mode='rb')
+        # will need to recieve a list where each item is a row of the query result
+        query_result = pickle.load(flo)
+        i = 0 
+        for result in query_result: 
+            fontresult = widget.QListWidgetItem(result)
+            fontresult.setFont(gui.QFont('Courier',10))
+            result_list.insertItem(i, fontresult) 
+            result_list.setCurrentRow(0)
+            i+=1
         #--------------submit button slot------------------
     def submit_slot(): 
             #-------------client----------------------
@@ -58,8 +78,10 @@ def main():
                 query_result = pickle.load(flo)
                 i = 0 
                 for result in query_result: 
-                    result_list.insertItem(i, result) 
-                    result_list.setCurrentRow(1)
+                    fontresult = widget.QListWidgetItem(result)
+                    fontresult.setFont(gui.QFont('Courier',10))
+                    result_list.insertItem(i, fontresult) 
+                    result_list.setCurrentRow(0)
                     i+=1
 
     submit.clicked.connect(submit_slot)
