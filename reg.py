@@ -2,12 +2,14 @@
 # reg.py
 # Author: Lois I Omotara
 # CHECKLIST 
-# []DEAL WITH ERRORS 
+# []DEAL WITH ERROR AND CORRUPTIONS
 # []READ ME 
 # [X]GET ALL AT ONCE
-# []KEYBOARD FOCUS 
-# [] WINDOWSIZE
-# [] SLIDERS 
+# [X]KEYBOARD FOCUS 
+# [X] WINDOWSIZE
+# [X] SLIDERS 
+# [] REMOVE DEBUG COMMENTS 
+# [] Submit button 
 #----------------------------------------------------------------------
 import argparse as ap
 import PyQt5.QtWidgets as widget
@@ -43,7 +45,7 @@ def main():
     area = widget.QLineEdit('')
     title = widget.QLineEdit('')
         #-------------submit button-------------------
-    submit = widget.QPushButton('submit')
+    submit = widget.QPushButton('Submit')
         #-------------list box------------------------
     result_list = widget.QListWidget()
             #---------initial------------------------
