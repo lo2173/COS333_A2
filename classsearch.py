@@ -4,7 +4,6 @@
 #----------------------------------------------------------------------
 import contextlib as cl
 import sqlite3
-import sys
 #----------------------------------------------------------------------
 DATABASE_URL = 'file:reg.sqlite?mode=ro'
 class ClassSearch:

@@ -85,3 +85,4 @@ class DatabaseSearch:
                 stmt_str+="crosslistings "
                 cursor.execute(stmt_str)
                 return cursor.fetchall()
+            
