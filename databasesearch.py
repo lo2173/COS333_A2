@@ -3,7 +3,9 @@
 # Author: Lois I Omotara
 #----------------------------------------------------------------------
 import sqlite3
-import contextlib as cl 
+import contextlib as cl
+
+DATABASE_URL = 'file:reg.sqlite?mode=ro'
 class DatabaseSearch:
     def __init__(self):
         self._stmt_str = "SELECT classes.classid, crosslistings.dept,"
@@ -59,22 +61,21 @@ class DatabaseSearch:
     def get_cmdstring(self):
         return self._stmt_str
     def execute(self):
-        DATABASE_URL = 'file:reg.sqlite?mode=ro' 
         with sqlite3.connect(DATABASE_URL , isolation_level= None,
             uri= True) as connection:
             with cl.closing(connection.cursor()) as cursor:
                 self._stmt_str+=" ORDER BY crosslistings.dept ASC"
-                self._stmt_str+=", crosslistings.coursenum ASC, classes.classid ASC"
+                self._stmt_str+=''', crosslistings.coursenum ASC,
+                 classes.classid ASC'''
                 cursor.execute(self._stmt_str, self._replace_list)
-                return cursor.fetchall() 
-    def fullsearch(self, idept, iarea, icoursenum, ititle): 
-            self.deptsearch(dept=idept)
-            self.areasearch(area=iarea)
-            self.numsearch(num=icoursenum)
-            self.titlesearch(title = ititle)
-            return self.execute()
-    def getall(self): 
-        DATABASE_URL = 'file:reg.sqlite?mode=ro' 
+                return cursor.fetchall()
+    def fullsearch(self, idept, iarea, icoursenum, ititle):
+        self.deptsearch(dept=idept)
+        self.areasearch(area=iarea)
+        self.numsearch(num=icoursenum)
+        self.titlesearch(title = ititle)
+        return self.execute()
+    def getall(self):
         with sqlite3.connect(DATABASE_URL , isolation_level= None,
             uri= True) as connection:
             with cl.closing(connection.cursor()) as cursor:
@@ -83,4 +84,4 @@ class DatabaseSearch:
                 stmt_str+= " courses.title FROM courses, classes, "
                 stmt_str+="crosslistings "
                 cursor.execute(stmt_str)
-                return cursor.fetchall() 
+                return cursor.fetchall()

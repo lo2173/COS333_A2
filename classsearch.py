@@ -12,14 +12,11 @@ class ClassSearch:
         self._classid = classid
 
     def __execute__(self, str):
-        try: 
-            with sqlite3.connect(DATABASE_URL , isolation_level= None,
-                uri= True) as connection:
-                with cl.closing(connection.cursor()) as cursor:
-                    cursor.execute(str, [self._classid])
-                    return cursor.fetchall()
-        except Exception as ex: 
-            print('classsearch.py',ex,file=sys.stderr)
+        with sqlite3.connect(DATABASE_URL , isolation_level= None,
+            uri= True) as connection:
+            with cl.closing(connection.cursor()) as cursor:
+                cursor.execute(str, [self._classid])
+                return cursor.fetchall()
     def get_general(self):
         stm_str = "SELECT courses.courseid, classes.days, "
         stm_str+= "classes.starttime, classes.endtime,"
