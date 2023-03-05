@@ -70,6 +70,18 @@ def create_central_frame(control_frame, list_frame):
     central_frame.setLayout(central_frame_layout)
     return central_frame
 
+def parser(): 
+    #-------------parser------------------------------
+    parser = ap.ArgumentParser(prog = "reg.py",
+    usage= "reg.py [-h] host port",
+    description= "Client for the registrar application")
+    parser.add_argument('host',
+    help="the host on which the server is running")
+    parser.add_argument('port',
+    help="the port at which the server is listening",
+    type=int)
+    return parser.parse_args()
+
 def initialize_list(host, port,window,result_list): 
     try: 
         with socket.socket() as sock: 
@@ -99,17 +111,30 @@ def initialize_list(host, port,window,result_list):
     except Exception as ex:
         widget.QMessageBox.critical(window,'Server Error', str(ex))
 
+def submit_slot_helper(window, host,port,inputlist): 
+    try:
+        with socket.socket() as sock:
+            sock.connect((host,port))
+            print('Connected to server')
+        #--------------text data----------------------
+            inputflo = sock.makefile(mode='wb')
+            pickle.dump(inputlist,inputflo)
+            inputflo.flush()
+            print("Sent command get_classes")
+            flo = sock.makefile(mode='rb')
+            query_result = pickle.load(flo)
+            if query_result == 'Error':
+                widget.QMessageBox.critical(window, 'Server Error',
+                '''A server error occured.
+                    Please contact the system administrator''')
+                return
+            i = 0 
+            return query_result
+    except Exception as ex: 
+        widget.QMessageBox.critical(window, 'Server Error ', ex)
     
 def main():
-    parser = ap.ArgumentParser(prog = "reg.py",
-    usage= "reg.py [-h] host port",
-    description= "Client for the registrar application")
-    parser.add_argument('host',
-    help="the host on which the server is running")
-    parser.add_argument('port',
-    help="the port at which the server is listening",
-    type=int)
-    args= parser.parse_args()
+    args = parser()
     host = args.host
     port = args.port
     #-----------gui-----------------------------------
@@ -126,36 +151,19 @@ def main():
         #------------window---------------------------
     window = widget.QMainWindow()
         #--------------submit button slot------------------
-    def submit_slot(): 
+    def submit_slot():
         #-------------client----------------------
-        # have to deal with security 
-        try: 
-            with socket.socket() as sock: 
-                sock.connect((host,port))
-                print('Connected to server')
-            #--------------text data----------------------
-                inputlist = [dept.text(), area.text(),coursenum.text() 
-                ,title.text()]
-                inputflo = sock.makefile(mode='wb')
-                pickle.dump(inputlist,inputflo)
-                inputflo.flush()
-                print("Sent command get_classes")
-                flo = sock.makefile(mode='rb')
-                query_result = pickle.load(flo)
-                if query_result == 'Error': 
-                    widget.QMessageBox.critical(window, 'Server Error', 
-                    'A server error occured. Please contact the system administrator')
-                    return
-                i = 0 
-                result_list.clear()
-                for result in query_result: 
-                    fontresult = widget.QListWidgetItem(result)
-                    fontresult.setFont(gui.QFont('Courier',10))
-                    result_list.insertItem(i, fontresult) 
-                    result_list.setCurrentRow(0)
-                    i+=1
-        except Exception as ex: 
-            widget.QMessageBox.critical(window, 'Server Error ', ex)
+        inputlist = [dept.text(), area.text(),
+        coursenum.text(),title.text()]
+        query_result = submit_slot_helper(window,host,port,inputlist)
+        result_list.clear()
+        for result in query_result: 
+            fontresult = widget.QListWidgetItem(result)
+            fontresult.setFont(gui.QFont('Courier',10))
+            result_list.insertItem(i, fontresult) 
+            result_list.setCurrentRow(0)
+            i+=1
+
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
     def class_slot(selected_item):
