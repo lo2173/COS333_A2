@@ -111,6 +111,7 @@ def main():
          )
     server_sock.bind(('',port))
     server_sock.listen()
+    
     while True: 
         try: 
              #------------connect to client----------------
