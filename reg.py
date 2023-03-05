@@ -45,6 +45,8 @@ def main():
     area_text = area.text()
     title_text = title.text()
     inputlist = [dept_text, coursenum_text, area_text, title_text]
+    for inputs in inputlist:
+        print(inputs)
         #--------------submit button slot------------------
     def submit_slot(result): 
             #-------------client----------------------

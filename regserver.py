@@ -115,7 +115,6 @@ def main():
         try: 
              #------------connect to client----------------
              isock, client_addr = server_sock.accept()
-             search_input
              with isock: 
                   print('Accepted connection at:', client_addr)
                   input_string = isock.makefile(mode ='rb')
