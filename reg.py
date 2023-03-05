@@ -16,7 +16,6 @@ def create_control_frame(dept, coursenum, area, title,submit):
     area_label = widget.QLabel(' Area: ')
     title_label = widget.QLabel(' Title: ')
         #-------------submit button-------------------
-    submit = widget.QPushButton('Submit')
     layout = widget.QGridLayout()
     layout.setSpacing(4)
     layout.setContentsMargins(4,4,4,4)
