@@ -39,14 +39,6 @@ def main():
     submit = widget.QPushButton('submit')
         #-------------list box------------------------
     result_list = widget.QListWidget()
-        #--------------text data----------------------
-    dept_text = dept.text()
-    coursenum_text = coursenum.text()
-    area_text = area.text()
-    title_text = title.text()
-    inputlist = [dept_text, coursenum_text, area_text, title_text]
-    for inputs in inputlist:
-        print(inputs)
         #--------------submit button slot------------------
     def submit_slot(result): 
             #-------------client----------------------
@@ -54,6 +46,12 @@ def main():
             with socket.socket() as sock: 
                 sock.connect((host,port))
                 print('Connected to server')
+            #--------------text data----------------------
+                dept_text = dept.text()
+                coursenum_text = coursenum.text()
+                area_text = area.text()
+                title_text = title.text()
+                inputlist = [dept_text, coursenum_text, area_text, title_text]
                 input = sock.makefile(mode='wb')
                 pickle.dump(inputlist,input)
                 input.flush
