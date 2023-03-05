@@ -40,7 +40,7 @@ def main():
         #-------------list box------------------------
     result_list = widget.QListWidget()
         #--------------submit button slot------------------
-    def submit_slot(result): 
+    def submit_slot(): 
             #-------------client----------------------
             # have to deal with security 
             with socket.socket() as sock: 
@@ -57,7 +57,6 @@ def main():
                 # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
                 i = 0 
-                result_list.clear()
                 for result in query_result: 
                     result_list.insertItem(i, result) 
                     result_list.setCurrentRow(1)
