@@ -26,7 +26,6 @@ def createRow(row):
         rowstring += ' '
         for i in range(4-len(str(row[3]))):
             rowstring += ' '
-            print('NUM SPACE=',i)
         rowstring += str(row[3])
         rowstring += ' '+row[4]
         return rowstring
@@ -135,7 +134,7 @@ def main():
             )
         server_sock.bind(('',port))
         server_sock.listen()
-
+        print('Listening ...')
         while True: 
             try: 
                 #------------connect to client----------------
@@ -150,6 +149,7 @@ def main():
                     else: 
                         handle_tuple(search_list=search_input, sock=isock)
                     print('Resolved search')
+                print('Closed socket')
             except Exception as ex: 
                 print(ex, file=sys.stderr)
                 sys.exit(1)
