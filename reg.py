@@ -47,21 +47,15 @@ def main():
                 sock.connect((host,port))
                 print('Connected to server')
             #--------------text data----------------------
-                dept_text = dept.text()
-                coursenum_text = coursenum.text()
-                area_text = area.text()
-                title_text = title.text()
-                inputlist = [dept_text, coursenum_text, area_text, title_text]
-                for inputs in inputlist: 
-                    print('EACH INPUT: '+inputs)
-                print(type(inputlist))
-                input = sock.makefile(mode='wb')
-                pickle.dump(inputlist,input)
-                input.flush
+                inputlist = [dept.text(), coursenum.text(), area.text()
+                ,title.text()]
+                inputflo = sock.makefile(mode='wb')
+                pickle.dump(inputlist,inputflo)
                 print("Sent command: get overviews")
                 flo = sock.makefile(mode='rb')
                 # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
+                input.flush
                 i = 0 
                 for result in query_result: 
                     result_list.insertItem(i, result) 
