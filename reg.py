@@ -53,7 +53,7 @@ def main():
                 title_text = title.text()
                 inputlist = [dept_text, coursenum_text, area_text, title_text]
                 for inputs in inputlist: 
-                    print('EACH INPUT: 'inputs)
+                    print('EACH INPUT: '+inputs)
                 print('TYPE'+ type(inputlist))
                 input = sock.makefile(mode='wb')
                 pickle.dump(inputlist,input)
