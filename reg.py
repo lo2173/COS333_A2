@@ -161,7 +161,7 @@ def list_slot_helper(selected_item,host,port,window):
                 file=sys.stderr)
                 return
             if class_info == 'Error':
-                widget.QMessageBox.critical(window, 'Server Error', 
+                widget.QMessageBox.critical(window, 'Server Error',
                 '''A server error occured.
                     Please contact the system administrator''')
                 return
