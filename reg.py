@@ -71,7 +71,7 @@ def main():
                 result_list.setCurrentRow(0)
                 i+=1
     except Exception as ex: 
-        print(ex,file=sys.stderr)
+        print(sys.argv[0],ex,file=sys.stderr)
         #--------------submit button slot------------------
     def submit_slot(): 
             #-------------client----------------------
