@@ -124,6 +124,7 @@ def submit_slot_helper(window, host,port,inputlist):
             print("Sent command get_classes")
             flo = sock.makefile(mode='rb')
             query_result = pickle.load(flo)
+            print('GOT HERE')
             if query_result == 'Error':
                 widget.QMessageBox.critical(window, 'Server Error',
                 '''A server error occured.
