@@ -40,8 +40,6 @@ def handle_tuple(search_list,sock):
             rawresults = search.fullsearch(idept=search_list[0], 
             iarea=search_list[1],icoursenum=search_list[2],
             ititle=search_list[3])
-        else: 
-            rawresults = search.getall()
         for irow in rawresults: 
             result_list.append(createRow(row=irow))
         flo = sock.makefile(mode='wb')
@@ -145,10 +143,8 @@ def main():
                 with isock: 
                     print('Accepted connection at:', client_addr)
                     inputflo = isock.makefile(mode ='rb')
-                    print('GOT TO MAKEFILE')
                     search_input = pickle.load(inputflo)
                     print(type(search_input))
-                    print('Recieved input')
                     if(type(search_input) == int): 
                         handle_int(classid=search_input,sock=isock)
                     else: 
