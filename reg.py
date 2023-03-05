@@ -81,10 +81,10 @@ def main():
                 inputflo = sock.makefile(mode='wb')
                 pickle.dump(inputlist,inputflo)
                 inputflo.flush()
-                print("Sent command: get overviews")
+                print("Sent command get_classes")
                 flo = sock.makefile(mode='rb')
-                # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
+                print('Recieved classes')
                 i = 0 
                 result_list.clear()
                 for result in query_result: 
@@ -102,24 +102,22 @@ def main():
             sock.connect((host,port))
             print('Connected to server')
             selected_split = selected.split(' ')
-            print("FIRST: "+selected_split[0])
-            print("SECOND: "+selected_split[1])
             classid = 0
             if len(selected_split[0])< 3: 
                 classid += int(selected_split[1])
             else: 
                 classid += int(selected_split[0])
-            classid = 0000
             input_data= sock.makefile(mode='wb')
-            print('sent classid')
             pickle.dump(classid,input_data)
             input_data.flush()
+            print('Sent commmand get_overview')
             flo = sock.makefile('rb')
             class_info = pickle.load(flo)
-            if flo is False: 
-                print('no class with classid '+str(classid)+' exists',
+            if class_info is False: 
+                print('No class with classid '+str(classid)+' exists',
                 file=sys.stderr)
-                return 
+                return
+            print('Recieved overview')
             widget.QMessageBox.information(window, 'Class Details',
             class_info)
             
