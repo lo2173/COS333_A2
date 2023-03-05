@@ -73,7 +73,7 @@ def main():
                 result_list.setCurrentRow(0)
                 i+=1
     except Exception as ex: 
-        widget.QMessageBox.warning(window, str(ex))
+        widget.QMessageBox.warning(window,'ERROR', str(ex))
         #--------------submit button slot------------------
     def submit_slot(): 
             #-------------client----------------------
