@@ -28,7 +28,8 @@ def createRow(row):
             rowstring += ' '
             print('NUM SPACE=',i)
         rowstring += str(row[3])
-        
+        if len(str(row[3])) == 0: 
+            rowstring+= ' '
         rowstring += str(' '+row[4])
         return rowstring
 # compile sqlite result string into tuple for client 
