@@ -7,6 +7,7 @@ import PyQt5.QtWidgets as widget
 import sys
 import socket 
 import pickle
+# 
 #----------------------------------------------------------------------
 
 def main(): 
@@ -66,7 +67,8 @@ def main():
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
-    def class_slot(selected): 
+    def class_slot(selected_item): 
+        selected = str(selected_item)
         with socket.socket() as sock: 
             sock.connect((host,port))
             print('Connected to server')
