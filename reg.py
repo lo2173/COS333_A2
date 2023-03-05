@@ -6,29 +6,29 @@ import argparse as ap
 import PyQt5.QtWidgets as widget
 import PyQt5.QtGui as gui
 import sys
-import socket 
+import socket
 import pickle
 import sys
 #----------------------------------------------------------------------
 def create_control_frame(dept_label, area_label, num_label, title_label,
-                  dept, area, coursenum, title, submit): 
+                  dept, area, coursenum, title, submit):
     #------------- control frame layout------------
     layout = widget.QGridLayout()
     layout.setSpacing(4)
     layout.setContentsMargins(4,4,4,4)
-    #--------------labels---------------------
+    #--------------labels---------------------------
     layout.addWidget(dept_label,0,0,1,1)
     layout.addWidget(area_label,1,0,1,1)
     layout.addWidget(num_label,2,0,1,1)
     layout.addWidget(title_label,3,0,1,1)
-    #-------------textfields-------------------
+    #-------------textfields------------------------
     layout.addWidget(dept,0,1,1,1)
     layout.addWidget(area,1,1,1,1)
     layout.addWidget(coursenum,2,1,1,1)
     layout.addWidget(title,3,1,1,1)
-    #-----------button-------------------------
+    #-----------button------------------------------
     layout.addWidget(submit,1,2,2,1)
-    #---------formatting-----------------------
+    #---------formatting----------------------------
     layout.setRowStretch(0,0)
     layout.setRowStretch(1,0)
     layout.setRowStretch(2,0)
@@ -40,20 +40,20 @@ def create_control_frame(dept_label, area_label, num_label, title_label,
     #----------------control_frame------------------
     control_frame = widget.QFrame()
     control_frame.setLayout(layout)
-    return control_frame 
+    return control_frame
 
 def create_list_frame(result_list):
-        #---------------list frame layout--------------
+    #---------------list frame layout---------------
     listlayout = widget.QGridLayout()
     listlayout.setSpacing(0)
     listlayout.setContentsMargins(0,0,0,0)
     listlayout.addWidget(result_list,0,0,1,1)
-        #-------------list_frame-----------------------
+     #-------------list_frame------------------------
     list_frame = widget.QFrame()
-    list_frame.setLayout(listlayout)   
+    list_frame.setLayout(listlayout)
     return list_frame
 
-def create_central_frame(control_frame, list_frame): 
+def create_central_frame(control_frame, list_frame):
     central_frame_layout = widget.QGridLayout()
     central_frame_layout.setSpacing(0)
     central_frame_layout.setContentsMargins(0,0,0,0)
@@ -62,24 +62,24 @@ def create_central_frame(control_frame, list_frame):
     central_frame_layout.setColumnStretch(0,1)
     central_frame_layout.addWidget(control_frame,0,0)
     central_frame_layout.addWidget(list_frame,1,0)
-        #--------------central_frame-------------------
+    #--------------central_frame-------------------
     central_frame = widget.QFrame()
     central_frame.setLayout(central_frame_layout)
     return central_frame
 
-def main(): 
+def main():
     #-------------parser------------------------------
-    parser = ap.ArgumentParser(prog = "reg.py", 
-    usage= "reg.py [-h] host port", 
+    parser = ap.ArgumentParser(prog = "reg.py",
+    usage= "reg.py [-h] host port",
     description= "Client for the registrar application")
-    parser.add_argument('host', 
+    parser.add_argument('host',
     help="the host on which the server is running")
-    parser.add_argument('port', 
+    parser.add_argument('port',
     help="the port at which the server is listening",
     type=int)
     args = parser.parse_args()
     host = args.host
-    port = args.port 
+    port = args.port
     #-----------gui-----------------------------------
     app = widget.QApplication(sys.argv)
         #--------------labels------------------------
@@ -99,25 +99,25 @@ def main():
         #------------window---------------------------
     window = widget.QMainWindow()
         #--------------submit button slot------------------
-    def submit_slot(): 
+    def submit_slot():
             #-------------client----------------------
-            # have to deal with security 
-            try: 
-                with socket.socket() as sock: 
+            try:
+                with socket.socket() as sock:
                     sock.connect((host,port))
                     print('Connected to server')
                 #--------------text data----------------------
-                    inputlist = [dept.text(), area.text(),coursenum.text() 
-                    ,title.text()]
+                    inputlist = [dept.text(), area.text(),
+                    coursenum.text(),title.text()]
                     inputflo = sock.makefile(mode='wb')
                     pickle.dump(inputlist,inputflo)
                     inputflo.flush()
                     print("Sent command get_classes")
                     flo = sock.makefile(mode='rb')
                     query_result = pickle.load(flo)
-                    if query_result == 'Error': 
+                    if query_result == 'Error':
                         widget.QMessageBox.critical(window, 'Server Error', 
-                        'A server error occured. Please contact the system administrator')
+                        '''A server error occured.
+                         Please contact the system administrator''')
                         return
                     i = 0 
                     result_list.clear()
@@ -156,14 +156,15 @@ def main():
                     return
                 if class_info == 'Error': 
                     widget.QMessageBox.critical(window, 'Server Error', 
-                    'A server error occured. Please contact the system administrator')
+                    '''A server error occured.
+                     Please contact the system administrator''')
                     return
                 widget.QMessageBox.information(window, 'Class Details',
                 class_info)
         except Exception as ex: 
             widget.QMessageBox.critical(window, 'Server Error',ex)
-    result_list.itemActivated.connect(class_slot)         
 
+    result_list.itemActivated.connect(class_slot)         
         #----------------control frame-----------------
     control_frame = create_control_frame(dept_label, area_label,
         num_label,title_label,dept, area,coursenum,title,submit)
@@ -193,19 +194,20 @@ def main():
             query_result = pickle.load(flo)
             if query_result == 'Error': 
                 widget.QMessageBox.critical(window, 'Server Error', 
-                'A server error occured. Please contact the system administrator')
+                '''A server error occured.
+                 Please contact the system administrator''')
                 return
-            i = 0 
-            for result in query_result: 
+            i = 0
+            for result in query_result:
                 fontresult = widget.QListWidgetItem(result)
                 fontresult.setFont(gui.QFont('Courier',10))
-                result_list.insertItem(i, fontresult) 
+                result_list.insertItem(i, fontresult)
                 result_list.setCurrentRow(0)
                 i+=1
-    except Exception as ex: 
+    except Exception as ex:
         widget.QMessageBox.critical(window,'Server Error', str(ex))
 
     sys.exit(app.exec_())
 #----------------------------------------------------------------------
-if __name__ == '__main__': 
+if __name__ == '__main__':
     main()

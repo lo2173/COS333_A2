@@ -1,18 +1,18 @@
 #----------------------------------------------------------------------
-# Author: Lois I. Omotara
 # regserver.py
+# Author: Lois I. Omotara
 #----------------------------------------------------------------------
 import databasesearch as ds
-import socket 
-import sys 
-import argparse as ap 
+import socket
+import sys
+import argparse as ap
 import pickle
 import os
 import textwrap as tw
 import classsearch as cs
 #----------------------------------------------------------------------
-# format each row for list given raw sqlite result row
-def createRow(row): 
+# formats raw data for listbox
+def createRow(row):
         rowstring = ''
         for i in range(5 - len(str(row[0]))):
             rowstring += ' '
@@ -29,17 +29,17 @@ def createRow(row):
         rowstring += str(row[3])
         rowstring += ' '+row[4]
         return rowstring
-# compile sqlite result string into tuple for client 
+# compile sqlite result string into list for client 
 def handle_tuple(search_list,sock):
-    try: 
+    try:
         result_list = []
         search = ds.DatabaseSearch()
         rawresults = None
         if search_list:
-            rawresults = search.fullsearch(idept=search_list[0], 
+            rawresults = search.fullsearch(idept=search_list[0],
             iarea=search_list[1],icoursenum=search_list[2],
             ititle=search_list[3])
-        for irow in rawresults: 
+        for irow in rawresults:
             result_list.append(createRow(row=irow))
         flo = sock.makefile(mode='wb')
         pickle.dump(result_list,flo)
@@ -85,8 +85,8 @@ def format_string(generaltable, dept_and_num, prof_table):
         formatstring+='Professor: '+name[0]+'\n'
     return formatstring
 
-def handle_int(classid, sock): 
-    try: 
+def handle_int(classid, sock):
+    try:
         searchresult = ''
         classstring = str(classid)
         search = cs.ClassSearch(classstring)
@@ -97,16 +97,16 @@ def handle_int(classid, sock):
             flo.flush()
             print('no class with classid '+classstring+' exists',
             file=sys.stderr)
-            return 
+            return
         d_and_n = search.get_deptandnum()
         profs = search.get_prof()
-        searchresult = format_string(generaltable = gen, 
+        searchresult = format_string(generaltable = gen,
         dept_and_num=d_and_n,
         prof_table=profs)
         flo = sock.makefile(mode='wb')
         pickle.dump(searchresult,flo)
         flo.flush()
-    except Exception as ex: 
+    except Exception as ex:
         flo = sock.makefile(mode='wb')
         pickle.dump('Error',flo)
         flo.flush()
@@ -114,50 +114,50 @@ def handle_int(classid, sock):
     print('Wrote to client')
 
 # connect to client 
-def main(): 
+def main():
     #--------------------parser-------------------------------
     parser = ap.ArgumentParser(prog='regserver.py',
     usage='regserver.py [-h] port',
     description='Server for the registrar application')
     parser.add_argument('port',
-                        help='the port at which the server should listen',
-                        type=int)
+    help='the port at which the server should listen',
+    type=int)
     args = parser.parse_args()
     #---------------listen---------------------------------
-    try: 
+    try:
         port = args.port
         server_sock = socket.socket()
         print('Opened socket server')
-        if os.name != 'nt': 
+        if os.name != 'nt':
             server_sock.setsockopt(
                 socket.SOL_SOCKET, socket.SO_REUSEADDR,1
             )
         server_sock.bind(('',port))
         server_sock.listen()
         print('Listening ...')
-        while True: 
-            try: 
+        while True:
+            try:
                 #------------connect to client----------------
                 isock, client_addr = server_sock.accept()
-                with isock: 
+                with isock:
                     print('Accepted connection at:', client_addr)
                     inputflo = isock.makefile(mode ='rb')
                     search_input = pickle.load(inputflo)
-                    if(type(search_input) == int): 
+                    if(type(search_input) == int):
                         handle_int(classid=search_input,sock=isock)
                         print('Recieved command get_overview')
-                    else: 
+                    else:
                         handle_tuple(search_list=search_input, sock=isock)
                         print('Recieved command get_classes')
                 print('Closed socket')
-            except Exception as ex: 
+            except Exception as ex:
                 print(ex, file=sys.stderr)
                 sys.exit(1)
     except Exception as ex: 
         print(ex,file=sys.stderr)
         sys.exit(1)
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     main()
         
     
