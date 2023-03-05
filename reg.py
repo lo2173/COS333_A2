@@ -70,7 +70,7 @@ def create_central_frame(control_frame, list_frame):
     central_frame.setLayout(central_frame_layout)
     return central_frame
 
-def parser(): 
+def create_parser():
     #-------------parser------------------------------
     parser = ap.ArgumentParser(prog = "reg.py",
     usage= "reg.py [-h] host port",
@@ -82,9 +82,9 @@ def parser():
     type=int)
     return parser.parse_args()
 
-def initialize_list(host, port,window,result_list): 
-    try: 
-        with socket.socket() as sock: 
+def initialize_list(host, port,window,result_list):
+    try:
+        with socket.socket() as sock:
             sock.connect((host,port))
             print('Connected to server')
             #--------------text data----------------------
@@ -94,10 +94,9 @@ def initialize_list(host, port,window,result_list):
             inputflo.flush()
             print("Sent command get_classes")
             flo = sock.makefile(mode='rb')
-            # will need to recieve a list where each item is a row of the query result
             query_result = pickle.load(flo)
-            if query_result == 'Error': 
-                widget.QMessageBox.critical(window, 'Server Error', 
+            if query_result == 'Error':
+                widget.QMessageBox.critical(window, 'Server Error',
                 '''A server error occured.
                  Please contact the system administrator''')
                 return
@@ -111,7 +110,7 @@ def initialize_list(host, port,window,result_list):
     except Exception as ex:
         widget.QMessageBox.critical(window,'Server Error', str(ex))
 
-def submit_slot_helper(window, host,port,inputlist,result_list): 
+def submit_slot_helper(window, host,port,inputlist,result_list):
     try:
         with socket.socket() as sock:
             sock.connect((host,port))
@@ -127,29 +126,29 @@ def submit_slot_helper(window, host,port,inputlist,result_list):
                 widget.QMessageBox.critical(window, 'Server Error',
                 '''A server error occured.
                     Please contact the system administrator''')
-                return 
+                return
             i=0
             result_list.clear()
-            for result in query_result: 
+            for result in query_result:
                 fontresult = widget.QListWidgetItem(result)
                 fontresult.setFont(gui.QFont('Courier',10))
-                result_list.insertItem(i, fontresult) 
+                result_list.insertItem(i, fontresult)
                 result_list.setCurrentRow(0)
                 i+=1
-    except Exception as ex: 
+    except Exception as ex:
         widget.QMessageBox.critical(window, 'Server Error ', ex)
 
-def list_slot_helper(selected_item,host,port,window): 
-    try: 
+def list_slot_helper(selected_item,host,port,window):
+    try:
         selected = selected_item.text()
-        with socket.socket() as sock: 
+        with socket.socket() as sock:
             sock.connect((host,port))
             print('Connected to server')
             selected_split = selected.split(' ')
             classid = 0
-            if len(selected_split[0])< 3: 
+            if len(selected_split[0])< 3:
                 classid += int(selected_split[1])
-            else: 
+            else:
                 classid += int(selected_split[0])
             input_data= sock.makefile(mode='wb')
             pickle.dump(classid,input_data)
@@ -157,28 +156,28 @@ def list_slot_helper(selected_item,host,port,window):
             print('Sent commmand get_overview')
             flo = sock.makefile('rb')
             class_info = pickle.load(flo)
-            if class_info is False: 
+            if class_info is False:
                 print('No class with classid '+str(classid)+' exists',
                 file=sys.stderr)
                 return
-            if class_info == 'Error': 
+            if class_info == 'Error':
                 widget.QMessageBox.critical(window, 'Server Error', 
                 '''A server error occured.
                     Please contact the system administrator''')
                 return
             widget.QMessageBox.information(window, 'Class Details',
             class_info)
-    except Exception as ex: 
+    except Exception as ex:
         widget.QMessageBox.critical(window, 'Server Error',ex)
 
-def create_window(window,central_frame): 
+def create_window(window,central_frame):
     window.setCentralWidget(central_frame)
     screen_size = widget.QDesktopWidget().screenGeometry()
     window.resize (screen_size.width()//2,screen_size.height()//2)
     window.setWindowTitle('Princeton University Class Search')
 
 def main():
-    args = parser()
+    args = create_parser()
     host = args.host
     port = args.port
     #-----------gui-----------------------------------
@@ -197,16 +196,16 @@ def main():
         #--------------submit button slot------------------
     def submit_slot():
         #-------------client----------------------
-        inputlist = [dept.text(), area.text(),
-        coursenum.text(),title.text()]
-        submit_slot_helper(window,host,port,inputlist,result_list)
+        submit_slot_helper(window,host,port,
+        [dept.text(), area.text(),coursenum.text(),title.text()],
+        result_list)
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
     def class_slot(selected_item):
         list_slot_helper(selected_item,host,port,window)
 
-    result_list.itemActivated.connect(class_slot)         
+    result_list.itemActivated.connect(class_slot)
         #----------------control frame-----------------
     control_frame = create_control_frame(dept, coursenum, area,
         title,submit)
