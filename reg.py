@@ -10,7 +10,7 @@ import socket
 import pickle
 import sys
 #----------------------------------------------------------------------
-def control_frame(dept_label, area_label, num_label, title_label,
+def create_control_frame(dept_label, area_label, num_label, title_label,
                   dept, area, coursenum, title, submit): 
         #------------- control frame layout------------
     layout = widget.QGridLayout()
@@ -140,8 +140,8 @@ def main():
     result_list.itemActivated.connect(class_slot)         
 
         #----------------control frame-----------------
-    control_frame = control_frame(dept_label, area_label, num_label,
-        title_label,dept, area,coursenum,title)
+    control_frame = create_control_frame(dept_label, area_label,
+        num_label,title_label,dept, area,coursenum,title)
         #---------------list frame layout--------------
     listlayout = widget.QGridLayout()
     listlayout.setSpacing(0)
