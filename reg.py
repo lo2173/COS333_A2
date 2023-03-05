@@ -206,13 +206,10 @@ def main():
         list_slot_helper(selected_item,host,port,window)
 
     result_list.itemActivated.connect(class_slot)
-        #----------------control frame-----------------
-    control_frame = create_control_frame(dept, coursenum, area,
-        title,submit)
-        #---------------list frame --------------
-    list_frame = create_list_frame(result_list)
         #---------------central frame layout-----------
-    central_frame = create_central_frame(control_frame, list_frame)
+    central_frame = create_central_frame(
+    create_control_frame(dept, coursenum, area,title,submit),
+    create_list_frame(result_list))
         #-------------window----------------------------
     create_window(window,central_frame)
     window.show()
