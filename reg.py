@@ -57,6 +57,7 @@ def main():
                 # will need to recieve a list where each item is a row of the query result
                 query_result = pickle.load(flo)
                 i = 0 
+                result_list.clear()
                 for result in query_result: 
                     result_list.insertItem(i, result) 
                     result_list.setCurrentRow(1)
