@@ -143,12 +143,12 @@ def main():
                     print('Accepted connection at:', client_addr)
                     inputflo = isock.makefile(mode ='rb')
                     search_input = pickle.load(inputflo)
-                    print(type(search_input))
                     if(type(search_input) == int): 
                         handle_int(classid=search_input,sock=isock)
+                        print('Recieved command get_overview')
                     else: 
                         handle_tuple(search_list=search_input, sock=isock)
-                    print('Resolved search')
+                        print('Recieved command get_classes')
                 print('Closed socket')
             except Exception as ex: 
                 print(ex, file=sys.stderr)
