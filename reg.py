@@ -30,10 +30,10 @@ def main():
     area_label = widget.QLabel('Area: ')
     title_label = widget.QLabel('Title: ')
         #--------------text fields--------------------
-    dept = widget.QLineEdit('dept')
-    coursenum = widget.QLineEdit('coursenum')
-    area = widget.QLineEdit('area')
-    title = widget.QLineEdit('title')
+    dept = widget.QLineEdit('')
+    coursenum = widget.QLineEdit('')
+    area = widget.QLineEdit('')
+    title = widget.QLineEdit('')
         #-------------submit button-------------------
     submit = widget.QPushButton('submit')
         #-------------list box------------------------
