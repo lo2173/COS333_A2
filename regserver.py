@@ -26,8 +26,9 @@ def createRow(row):
         rowstring += ' '
         for i in range(4-len(str(row[3]))):
             rowstring += ' '
-            print('HERE')
+            print(len(str(row[3])))
         rowstring += str(row[3])
+        
         rowstring += str(' '+row[4])
         return rowstring
 # compile sqlite result string into tuple for client 
