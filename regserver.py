@@ -79,7 +79,7 @@ def format_string(generaltable, dept_and_num, prof_table):
 
 def handle_int(classid, sock): 
     searchresult = ''
-    search = cs.ClassSearch(classid)
+    search = cs.ClassSearch(str(classid))
     gen = search.get_general()
     d_and_n = search.get_deptandnum()
     profs = search.get_prof()
