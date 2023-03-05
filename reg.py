@@ -26,10 +26,10 @@ def main():
     #-----------gui-----------------------------------
     app = widget.QApplication(sys.argv)
         #--------------labels------------------------
-    dept_label = widget.QLabel('Dept:')
-    num_label = widget.QLabel('Number: ')
-    area_label = widget.QLabel('Area: ')
-    title_label = widget.QLabel('Title: ')
+    dept_label = widget.QLabel(' Dept:')
+    num_label = widget.QLabel(' Number: ')
+    area_label = widget.QLabel(' Area: ')
+    title_label = widget.QLabel(' Title: ')
         #--------------text fields--------------------
     dept = widget.QLineEdit('')
     coursenum = widget.QLineEdit('')
@@ -67,14 +67,16 @@ def main():
 
     submit.clicked.connect(submit_slot)
         #--------------list option slot------------------
-    def class_slot(selected_item): 
-        selected = str(selected_item)
+    def class_slot(selected_item):
+        selected = selected_item.text()
         with socket.socket() as sock: 
             sock.connect((host,port))
             print('Connected to server')
             selected_split = selected.split(' ')
+            print("FIRST: "+selected_split[0])
+            print("SECOND: "+selected_split[1])
             classid = 0
-            if selected_split == ' ': 
+            if len(selected_split[0])< 3: 
                 classid += int(selected_split[1])
             else: 
                 classid += int(selected_split[0])
